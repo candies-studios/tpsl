@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-labelledby="t"><title id="t">Mobile card reader paired with a smartphone</title><ellipse cx="150" cy="270" rx="100" ry="10" fill="#1A1A1A" opacity=".08"/>
+<rect x="150" y="40" width="96" height="190" rx="18" fill="#1A1A1A"/>
+<rect x="157" y="54" width="82" height="160" rx="8" fill="#F4F7FB"/>
+<text x="165" y="96" font-family="Arial, sans-serif" font-weight="700" font-size="16" fill="#1A1A1A">₹2,400</text>
+<rect x="165" y="110" width="66" height="8" rx="4" fill="#E9E4DF"/><rect x="165" y="124" width="50" height="8" rx="4" fill="#E9E4DF"/>
+<circle cx="198" cy="166" r="18" fill="#E9F7EF"/><path d="M189 166 l6 6 l12 -13" fill="none" stroke="#3BA55C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="58" y="110" width="100" height="150" rx="20" fill="#2B2724"/>
+<rect x="70" y="122" width="76" height="34" rx="6" fill="#F4F7FB"/>
+<rect x="78" y="134" width="40" height="8" rx="4" fill="#1A1A1A" opacity=".7"/>
+<circle cx="82" cy="176" r="8" fill="#3A3532"/><circle cx="108" cy="176" r="8" fill="#3A3532"/><circle cx="134" cy="176" r="8" fill="#3A3532"/><circle cx="82" cy="196" r="8" fill="#3A3532"/><circle cx="108" cy="196" r="8" fill="#3A3532"/><circle cx="134" cy="196" r="8" fill="#3A3532"/><circle cx="82" cy="216" r="8" fill="#3A3532"/><circle cx="108" cy="216" r="8" fill="#3A3532"/><circle cx="134" cy="216" r="8" fill="#3A3532"/><circle cx="82" cy="236" r="8" fill="#3A3532"/><circle cx="108" cy="236" r="8" fill="#3A3532"/><circle cx="134" cy="236" r="8" fill="#3A3532"/>
+<g transform="rotate(0 160 140)"><path d="M160 134 A6 6 0 0 1 160 146" fill="none" stroke="#FFB23F" stroke-width="4" stroke-linecap="round" opacity="1.00"/><path d="M160 126 A14 14 0 0 1 160 154" fill="none" stroke="#FFB23F" stroke-width="4" stroke-linecap="round" opacity="0.78"/></g>
+</svg>
