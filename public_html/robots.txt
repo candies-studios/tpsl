@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /enquiry.php
+Disallow: /thank-you.html
+
+Sitemap: https://www.tpsl.in/sitemap.xml

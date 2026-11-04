@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 360" role="img" aria-labelledby="t"><title id="t">Payment link shared by SMS and email</title>
+<circle cx="230" cy="180" r="150" fill="#FDEEE4"/>
+<rect x="150" y="30" width="160" height="300" rx="26" fill="#1A1A1A"/>
+<rect x="160" y="48" width="140" height="266" rx="14" fill="#FFFFFF"/>
+<rect x="172" y="64" width="80" height="8" rx="4" fill="#E9E4DF"/>
+<rect x="172" y="84" width="116" height="74" rx="14" fill="#F4F7FB"/>
+<text x="182" y="106" font-family="Arial, sans-serif" font-size="10.5" fill="#5F6B7A">Invoice #1042 is due</text>
+<text x="182" y="128" font-family="Arial, sans-serif" font-weight="700" font-size="17" fill="#1A1A1A">₹12,800</text>
+<text x="182" y="148" font-family="Arial, sans-serif" font-size="10.5" font-weight="700" fill="#C14C23">pay.example/abc123</text>
+<rect x="200" y="172" width="88" height="44" rx="14" fill="#FDEEE4"/>
+<text x="212" y="198" font-family="Arial, sans-serif" font-size="10.5" fill="#1A1A1A">Paid. Thanks!</text>
+<rect x="172" y="268" width="116" height="30" rx="15" fill="#C14C23"/>
+<text x="230" y="288" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="12" fill="#FFFFFF">Pay now</text>
+<g transform="translate(310 90)"><rect width="110" height="70" rx="12" fill="#FFFFFF" stroke="#E9E4DF" stroke-width="2"/><path d="M12 14 L55 42 L98 14" fill="none" stroke="#F15A22" stroke-width="4" stroke-linejoin="round"/><text x="12" y="62" font-family="Arial, sans-serif" font-size="10" fill="#5F6B7A">Email</text></g>
+<g transform="translate(40 200)"><rect width="110" height="58" rx="12" fill="#FFFFFF" stroke="#E9E4DF" stroke-width="2"/><rect x="12" y="14" width="70" height="8" rx="4" fill="#FFB23F"/><rect x="12" y="30" width="50" height="8" rx="4" fill="#E9E4DF"/><text x="76" y="50" font-family="Arial, sans-serif" font-size="10" fill="#5F6B7A">SMS</text></g>
+<g fill="none" stroke="#2B2724" stroke-width="6" stroke-linecap="round" transform="translate(70 70)"><path d="M28 18 l8 -8 a14 14 0 0 1 20 20 l-8 8"/><path d="M28 38 l-8 8 a14 14 0 0 1 -20 -20 l8 -8"/><path d="M22 34 l16 -16"/></g>
+</svg>
