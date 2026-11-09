@@ -83,8 +83,7 @@ def footer():
       <div class="footer-brand">
         <img src="assets/img/tpsl-logo.svg" alt="TPSL" width="124" height="60">
         <p class="tag">Powering Payments. Enabling Possibilities.</p>
-        <address><strong>TPSL India Private Limited</strong>{ph("Registered office address")}<br>{ph("CIN")} · Phone: {ph("Phone number")}</address>
-        <address><strong>TPSL ePayments India Private Limited</strong>{ph("Registered office address")}<br>{ph("CIN")} · Phone: {ph("Phone number")}</address>
+        <p class="footer-phone">Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p>
       </div>
       <div>
         <h4>Quick Links</h4>
@@ -104,6 +103,7 @@ def footer():
         <div class="social"><a href="{LINKEDIN}" rel="noopener noreferrer" target="_blank" aria-label="TPSL on LinkedIn (opens in a new tab)">{ICON["linkedin"]}</a></div>
       </div>
     </div>
+    <div class="footer-entities">{"".join(f'''<address class="entity-card"><strong>{e["name"].upper()}</strong><span class="formerly">(Formerly known as "{e["formerly"]}")</span>{ADDRESS_HTML}<span class="ids">CIN: {e["cin"]}<br>GST No. {e["gst"]}</span></address>''' for e in ENTITIES)}</div>
     <div class="footer-bottom">
       <p>© {YEAR} TPSL. All Rights Reserved.</p>
       <p class="safety">TPSL will never ask for your card PIN, CVV, OTP or passwords. Report suspected fraud on <a href="tel:1930">1930</a> or <a href="https://cybercrime.gov.in/" rel="noopener noreferrer" target="_blank">cybercrime.gov.in</a>.</p>
@@ -127,6 +127,16 @@ def footer():
 <script src="assets/js/main.js" defer></script>'''
 
 
+PHONE_DISPLAY = "022 7198 0000"
+PHONE_TEL = "+912271980000"
+ADDRESS_HTML = "Raiaskaran Tech Park, Tower 1, 2nd Floor, Phase 2,<br>Sakinaka, M.V. Road, Andheri East,<br>Mumbai – 400072"
+ENTITIES = [
+    {"name": "TPSL India Private Limited", "formerly": "Worldline India Private Limited",
+     "cin": "U72200MH1997PTC242097", "gst": "27AABCE2403J1Z0"},
+    {"name": "TPSL ePayments India Private Limited", "formerly": "Worldline ePayments India Private Limited",
+     "cin": "U74200MH2005PTC192623", "gst": "27AABCE4591N1Z6"},
+]
+
 LINKEDIN = "https://www.linkedin.com/"  # TODO: replace with TPSL's LinkedIn company page URL
 
 
@@ -136,7 +146,9 @@ def page(filename, title, desc, active, body, noindex=False):
     if filename == "index.html":
         ld = '<script type="application/ld+json">' + json.dumps({
             "@context": "https://schema.org", "@type": "Organization", "name": "TPSL", "url": SITE + "/",
-            "logo": SITE + "/assets/img/tpsl-logo.svg", "slogan": "Powering Payments. Enabling Possibilities.",
+            "logo": SITE + "/assets/img/tpsl-logo.svg", "slogan": "Powering Payments. Enabling Possibilities.", "telephone": PHONE_TEL,
+            "address": {"@type": "PostalAddress", "streetAddress": "Raiaskaran Tech Park, Tower 1, 2nd Floor, Phase 2, Sakinaka, M.V. Road, Andheri East",
+                        "addressLocality": "Mumbai", "postalCode": "400072", "addressRegion": "Maharashtra", "addressCountry": "IN"},
         }) + "</script>"
     full_title = title if filename == "index.html" else f"{title} | TPSL"
     html = f'''<!doctype html>
@@ -568,9 +580,9 @@ con = page_hero([("Contact Us", None)], "Let's Connect", "Your Business. Our Pay
                 "Whether you're looking for payment solutions, exploring a partnership or seeking assistance, we're here to help. Connect with TPSL to discover how our payment technology can support your business.")
 con += f'''<section class="section"><div class="container contact-grid">
   <div>
-    <div class="info-card"><h3>TPSL India Private Limited</h3><p>{ph("Registered office address")}</p><p>{ph("CIN")}</p><p>Customer support: <a href="tel:18602332332">1860 233 2332</a></p><p><a href="mailto:customer_support@mail.tpsl-india.co.in">customer_support@mail.tpsl-india.co.in</a></p></div>
-    <div class="info-card"><h3>TPSL ePayments India Private Limited</h3><p>{ph("Registered office address")}</p><p>{ph("CIN")}</p><p>Customer service: <a href="tel:+912267664481">022-67664481</a></p><p><a href="mailto:grievance@mail.tpsl-india.co.in">grievance@mail.tpsl-india.co.in</a></p></div>
-    <div class="info-card"><h3>Corporate enquiries</h3><p>{ph("Corporate email and phone")}</p></div>
+    <div class="info-card"><h3>TPSL India Private Limited</h3><p>{ADDRESS_HTML}</p><p>CIN: {ENTITIES[0]["cin"]}<br>GST No. {ENTITIES[0]["gst"]}</p><p>Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p><p>Customer support: <a href="tel:18602332332">1860 233 2332</a></p><p><a href="mailto:customer_support@mail.tpsl-india.co.in">customer_support@mail.tpsl-india.co.in</a></p></div>
+    <div class="info-card"><h3>TPSL ePayments India Private Limited</h3><p>{ADDRESS_HTML}</p><p>CIN: {ENTITIES[1]["cin"]}<br>GST No. {ENTITIES[1]["gst"]}</p><p>Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p><p>Customer service: <a href="tel:+912267664481">022-67664481</a></p><p><a href="mailto:grievance@mail.tpsl-india.co.in">grievance@mail.tpsl-india.co.in</a></p></div>
+    <div class="info-card"><h3>Corporate enquiries</h3><p>Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p></div>
     <p class="muted">For complaints, please follow the <a href="support.html#grievance">grievance redressal process</a>.</p>
   </div>
   <div>{enquiry_form("contact-form")}</div>
@@ -594,7 +606,7 @@ def legal(filename, title, desc, intro, sections, review_note=True):
 GRO = f'''<p><strong>Grievance Officer / Data Protection contact</strong><br>
 Name: {ph("Name")}<br>Designation: {ph("Designation")}<br>
 Email: {ph("privacy@tpsl.in or designated mailbox")}<br>
-Address: {ph("Registered office address")}</p>'''
+Address: {ADDRESS_HTML.replace("<br>", " ")}<br>Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p>'''
 
 privacy_sections = [
     ("scope", "Scope of this Policy", f'''<p>This Privacy Policy explains how TPSL India Private Limited and TPSL ePayments India Private Limited (together, "TPSL", "we", "us" or "our") collect, use, share and protect information when you visit <a href="{SITE}/">{SITE.replace("https://", "")}</a> (the "Website") or contact us through it.</p>
@@ -650,7 +662,7 @@ terms_sections = [
     ("third", "5. Third-Party Links", '<p>Links to third-party websites are provided for convenience. TPSL does not control and is not responsible for the content, availability or practices of those websites.</p>'),
     ("privacy", "6. Privacy", '<p>Your use of the Website is also governed by our <a href="privacy-policy.html">Privacy Policy</a>.</p>'),
     ("liability", "7. Limitation of Liability", '<p>To the fullest extent permitted by law, TPSL shall not be liable for any indirect, incidental, special or consequential loss arising from your use of, or inability to use, the Website or reliance on its content.</p>'),
-    ("law", "8. Governing Law and Jurisdiction", f'<p>These terms are governed by the laws of India. Courts at {ph("City")} shall have exclusive jurisdiction over any dispute arising from them.</p>'),
+    ("law", "8. Governing Law and Jurisdiction", f'<p>These terms are governed by the laws of India. Courts at Mumbai shall have exclusive jurisdiction over any dispute arising from them.</p>'),
     ("changes", "9. Changes", '<p>TPSL may revise these terms at any time by updating this page. Continued use of the Website after changes are posted means you accept the revised terms.</p>'),
     ("contact", "10. Contact", '<p>Questions about these terms may be sent through our <a href="contact.html">Contact Us</a> page.</p>'),
 ]
