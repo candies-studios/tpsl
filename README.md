@@ -5,11 +5,12 @@ Static website for TPSL (www.tpsl.in), built from *TPSL Complete Website Content
 ## Folder structure
 
 ```
-public_html/                 ← upload this folder's contents to the web root
+(repo root)                  ← these files are the website; upload them to the web root
   index.html                 Home
   offerings.html             Our Offerings (overview)
   in-store-payments.html     POS Terminals, Soft POS, Sound Box
   online-payments.html       Payment Gateway, Recurring Payments, Payment Links
+  cross-border-payments.html International card acceptance, settlements, benefits
   value-added-services.html  Merchant Hub, Onboarding, DCC, UPI, Transit, Embedded
   resources.html             Policies & regulatory info, annual returns
   support.html               Grievance redressal matrix, MNRL rules, complaint steps

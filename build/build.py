@@ -8,7 +8,7 @@ except enquiry.php for the contact form).
 import os, json, datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "public_html")
+OUT = ROOT  # pages are served from the repository root
 SITE = "https://www.tpsl.in"
 UPDATED = "4 November 2026"
 YEAR = 2026
@@ -27,6 +27,7 @@ ICON = {
     "shield": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
     "bank": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-6 9 6"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 21h18"/></svg>',
     "chart": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+    "world": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>',
     "doc": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/></svg>',
     "mail": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
     "phone": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>',
@@ -43,6 +44,7 @@ NAV = [
 OFFER_SUB = [
     ("In-Store Payments", "in-store-payments.html", "POS Terminals, Soft POS, Sound Box"),
     ("Online Payments", "online-payments.html", "Payment Gateway, Recurring Payments, Payment Links"),
+    ("Cross-Border Payments", "cross-border-payments.html", "International card acceptance and settlements"),
     ("Value Added Services", "value-added-services.html", "Merchant hub, onboarding, DCC, UPI, Transit, Embedded"),
 ]
 
@@ -90,7 +92,7 @@ def footer():
       </div>
       <div>
         <h4>Our Solutions</h4>
-        <ul><li><a href="in-store-payments.html">In-Store Payments</a></li><li><a href="online-payments.html">Online Payments</a></li><li><a href="value-added-services.html">Value Added Services</a></li></ul>
+        <ul><li><a href="in-store-payments.html">In-Store Payments</a></li><li><a href="online-payments.html">Online Payments</a></li><li><a href="cross-border-payments.html">Cross-Border Payments</a></li><li><a href="value-added-services.html">Value Added Services</a></li></ul>
       </div>
       <div>
         <h4>Legal &amp; Policies</h4>
@@ -193,7 +195,7 @@ def cta_band(title="Let's Simplify Payments Together", text="Looking for the rig
 
 
 ENQUIRY_TYPES = ["In-Store Payments (POS, Soft POS, Sound Box)", "Online Payments (Gateway, Recurring, Payment Links)",
-                 "Value Added Services", "Partnership", "Existing Merchant Support", "Other"]
+                 "Cross-Border Payments", "Value Added Services", "Partnership", "Existing Merchant Support", "Other"]
 
 
 def enquiry_form(fid, preselect=""):
@@ -253,9 +255,10 @@ home = f'''
       <h2>Payment Solutions for Every Business</h2>
       <p class="lead">From in-store payments to digital transactions, TPSL offers a comprehensive suite of payment solutions designed to simplify payment acceptance, improve operational efficiency and support business growth.</p>
     </div>
-    <div class="cards">
+    <div class="cards four">
       <article class="card reveal"><div class="icon">{ICON["store"]}</div><h3>In-Store Payments</h3><p>Accept payments seamlessly across physical business locations with our range of POS terminals, Soft POS and Sound Box solutions.</p><a class="btn-link" href="in-store-payments.html">Explore In-Store Solutions</a></article>
       <article class="card reveal"><div class="icon">{ICON["globe"]}</div><h3>Online Payments</h3><p>Enable convenient digital payment acceptance with our Payment Gateway, Recurring Payments and Payment Links solutions.</p><a class="btn-link" href="online-payments.html">Explore Online Solutions</a></article>
+      <article class="card reveal"><div class="icon">{ICON["world"]}</div><h3>Cross-Border Payments</h3><p>Accept payments from international customers using international credit cards, with settlement into designated bank accounts.</p><a class="btn-link" href="cross-border-payments.html">Explore Cross-Border Payments</a></article>
       <article class="card reveal"><div class="icon">{ICON["spark"]}</div><h3>Value Added Services</h3><p>Go beyond payment acceptance with solutions for merchant management, digital onboarding, Dynamic Currency Conversion, UPI payments, Transit and Embedded payments.</p><a class="btn-link" href="value-added-services.html">Explore Value Added Services</a></article>
     </div>
   </div>
@@ -285,6 +288,8 @@ groups = [
      [("POS Terminals", "pos"), ("Soft POS", "softpos"), ("Sound Box", "soundbox")]),
     ("Online Payments", "online-payments.html", "globe", "Seamless Digital Payments for Your Business", "checkout-web.svg",
      [("Payment Gateway", "gateway"), ("Recurring Payments", "recurring"), ("Payment Links", "links")]),
+    ("Cross-Border Payments", "cross-border-payments.html", "world", "Enabling Seamless Payments Across Borders", "cross-border.svg",
+     [("International Payment Acceptance", "features"), ("Simplified Settlements", "features"), ("Business Benefits", "benefits")]),
     ("Value Added Services", "value-added-services.html", "spark", "Beyond Payments. Enabling More.", "merchant-hub.svg",
      [("One Merchant Hub", "hub"), ("Digital &amp; Omnichannel Onboarding", "onboarding"), ("Dynamic Currency Conversion", "dcc"),
       ("End-to-End UPI Solution", "upi"), ("Transit Solutions", "transit"), ("Embedded Payments", "embedded")]),
@@ -292,6 +297,7 @@ groups = [
 blurbs = {
     "In-Store Payments": "Enable seamless payment acceptance across physical business locations with TPSL's range of in-store payment solutions.",
     "Online Payments": "Simplify online payment acceptance with flexible solutions designed to support businesses across digital channels.",
+    "Cross-Border Payments": "Expand your business globally. Accept payments from international customers through a secure and reliable payment infrastructure.",
     "Value Added Services": "Enhance business efficiency and customer experience with TPSL's range of value added services designed to simplify payment operations and support evolving business needs.",
 }
 for i, (name, href, ic, tag, art, items) in enumerate(groups):
@@ -302,7 +308,7 @@ for i, (name, href, ic, tag, art, items) in enumerate(groups):
   <div class="reveal art-frame"><img src="assets/img/{art}" alt=""></div>
 </div></section>'''
 offer += cta_band()
-page("offerings.html", "Our Offerings", "TPSL payment solutions: in-store payments, online payments and value added services for businesses of every size.", "offerings", offer)
+page("offerings.html", "Our Offerings", "TPSL payment solutions: in-store payments, online payments, cross-border payments and value added services for businesses of every size.", "offerings", offer)
 
 # =========================================================================== IN-STORE
 def product(id_, eyebrow, h2, tagline, paras, art, extra="", alt="", reverse=False, enquiry=""):
@@ -402,6 +408,35 @@ online += product("links", "Payment Links", "Collect Payments. Anytime, Anywhere
                   enquiry="links")
 online += cta_band()
 page("online-payments.html", "Online Payments", "TPSL Payment Gateway, Recurring Payments and Payment Links for secure digital payment acceptance.", "offerings", online)
+
+# =========================================================================== CROSS-BORDER
+cb = page_hero([("Our Offerings", "offerings.html"), ("Cross-Border Payments", None)], "Cross-Border Payments", "Enabling Seamless Payments Across Borders",
+               "Expand your business globally with TPSL's Cross-Border Payment Solutions. Accept payments from international customers through a secure and reliable payment infrastructure, simplifying overseas collections and supporting business growth.")
+cb += '''<section class="product-block" id="features"><div class="container">
+  <div class="split">
+    <div class="reveal"><span class="eyebrow">Key Features</span><h2>International Payments, Simplified</h2>
+      <ul class="check-list">
+        <li><strong>International Payment Acceptance</strong> – Accept payments from overseas customers using international credit cards.</li>
+        <li><strong>Simplified Settlements</strong> – Enable settlement of international collections into designated bank accounts through supported arrangements.</li>
+        <li><strong>Secure Transactions</strong> – Facilitate cross-border payments through a secure payment infrastructure with appropriate risk and compliance controls.</li>
+        <li><strong>Easy Integration</strong> – Integrate international payment acceptance into your existing online payment ecosystem.</li>
+        <li><strong>Transaction Visibility</strong> – Access payment information and reports for better tracking and reconciliation.</li>
+      </ul>
+      <a class="btn btn-primary" href="contact.html?enquiry=crossborder">Explore Cross-Border Payment Solutions</a></div>
+    <div class="reveal art-frame"><img src="assets/img/cross-border.svg" alt="International card payment travelling across a globe and settling into a bank account" width="520" height="380"></div>
+  </div>
+</div></section>
+<section class="section alt" id="benefits"><div class="container">
+  <div class="section-head reveal"><span class="eyebrow">Business Benefits</span><h2>Grow Beyond Borders</h2></div>
+  <div class="cards four">
+    <article class="card reveal"><div class="icon">''' + ICON["world"] + '''</div><h3>Global Reach</h3><p>Expand your reach to international customers.</p></article>
+    <article class="card reveal"><div class="icon">''' + ICON["bank"] + '''</div><h3>Simpler Collections</h3><p>Simplify overseas payment collections.</p></article>
+    <article class="card reveal"><div class="icon">''' + ICON["globe"] + '''</div><h3>Customer Convenience</h3><p>Improve payment convenience for global customers.</p></article>
+    <article class="card reveal"><div class="icon">''' + ICON["chart"] + '''</div><h3>Greater Visibility</h3><p>Manage cross-border transactions with greater visibility.</p></article>
+  </div>
+</div></section>'''
+cb += cta_band("Ready to Accept Payments from Around the World?", "Talk to our team about adding international payment acceptance to your business.", "Explore Cross-Border Payment Solutions").replace('href="contact.html"', 'href="contact.html?enquiry=crossborder"')
+page("cross-border-payments.html", "Cross-Border Payments", "Accept payments from international customers with TPSL's Cross-Border Payment Solutions: international card acceptance, simplified settlements and transaction visibility.", "offerings", cb)
 
 # =========================================================================== VAS
 vas = page_hero([("Our Offerings", "offerings.html"), ("Value Added Services", None)], "Value Added Services", "Beyond Payments. Enabling More.",
@@ -638,7 +673,7 @@ page("404.html", "Page Not Found", "The page you are looking for could not be fo
      "The page may have moved or no longer exists.") + '<section class="section-sm"><div class="container"><a class="btn btn-primary" href="index.html">Go to Home</a> <a class="btn btn-outline" href="contact.html">Contact Us</a></div></section>', noindex=True)
 
 # =========================================================================== sitemap / robots
-pages = ["", "offerings.html", "in-store-payments.html", "online-payments.html", "value-added-services.html", "resources.html",
+pages = ["", "offerings.html", "in-store-payments.html", "online-payments.html", "cross-border-payments.html", "value-added-services.html", "resources.html",
          "support.html", "contact.html", "privacy-policy.html", "terms-and-conditions.html", "disclaimer.html"]
 today = datetime.date.today().isoformat()
 sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(

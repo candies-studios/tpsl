@@ -185,7 +185,7 @@
   /* ---------- Pre-select enquiry type from ?enquiry= ---------- */
   try {
     var q = new URLSearchParams(window.location.search).get("enquiry");
-    var groupsMap = { pos: 0, softpos: 0, soundbox: 0, gateway: 1, recurring: 1, links: 1, hub: 2, onboarding: 2, dcc: 2, upi: 2, transit: 2, embedded: 2 };
+    var groupsMap = { pos: 0, softpos: 0, soundbox: 0, gateway: 1, recurring: 1, links: 1, crossborder: 2, hub: 3, onboarding: 3, dcc: 3, upi: 3, transit: 3, embedded: 3 };
     if (q && Object.prototype.hasOwnProperty.call(groupsMap, q)) {
       document.querySelectorAll("select[name='enquiry_type']").forEach(function (sel) { sel.selectedIndex = groupsMap[q] + 1; });
     }

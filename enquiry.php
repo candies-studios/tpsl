@@ -86,7 +86,7 @@ $consent = ($_POST['consent'] ?? '') === 'yes';
 $allowedTypes = [
     'In-Store Payments (POS, Soft POS, Sound Box)',
     'Online Payments (Gateway, Recurring, Payment Links)',
-    'Value Added Services', 'Partnership', 'Existing Merchant Support', 'Other',
+    'Cross-Border Payments', 'Value Added Services', 'Partnership', 'Existing Merchant Support', 'Other',
 ];
 
 $errors = [];
