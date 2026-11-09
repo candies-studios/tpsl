@@ -454,7 +454,7 @@ page("cross-border-payments.html", "Cross-Border Payments", "Accept payments fro
 vas = page_hero([("Our Offerings", "offerings.html"), ("Value Added Services", None)], "Value Added Services", "Beyond Payments. Enabling More.",
                 "Enhance business efficiency and customer experience with TPSL's range of value added services designed to simplify payment operations and support evolving business needs.")
 vas += '<nav class="subnav" aria-label="On this page"><div class="container"><ul>' + "".join(
-    f'<li><a href="#{a}">{l}</a></li>' for l, a in groups[2][5]) + "</ul></div></nav>"
+    f'<li><a href="#{a}">{l}</a></li>' for l, a in next(g for g in groups if g[0] == "Value Added Services")[5]) + "</ul></div></nav>"
 vas += product("hub", "One Merchant Hub", "One Platform. Simplified Merchant Management.", "",
                ["Manage all your payment channels through one unified platform. Gain complete transaction visibility, streamline operations and make smarter business decisions with centralized merchant management."],
                '<img src="assets/img/merchant-hub.svg" alt="Unified merchant dashboard with transaction metrics and charts">',
