@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 const RECIPIENTS    = ['sales@tpsl.in'];            // TODO: mailbox(es) that should receive enquiries
 const FROM_ADDRESS  = 'no-reply@tpsl.in';           // TODO: must be a sender allowed by tpsl.in SPF/DKIM
-const ALLOWED_HOSTS = ['www.tpsl.in', 'tpsl.in'];   // hosts allowed to post the form
+const ALLOWED_HOSTS = ['www.tpsl.in', 'tpsl.in', 'dg4.335.mytemp.website'];   // live + cPanel preview address
 const MAX_PER_HOUR  = 5;                             // submissions per IP per hour
 
 header('X-Content-Type-Options: nosniff');

@@ -1,52 +1,64 @@
 # =====================================================================
-# TPSL website — Apache (.htaccess) equivalent of the nginx config.
-# Use ONLY if the site is hosted on Apache. Rename to ".htaccess" and place
-# it in public_html/. Requires mod_rewrite, mod_headers, mod_expires.
-# TLS protocol/cipher settings must be set in the Apache vhost, not here.
+# TPSL website — .htaccess for cPanel (Apache / LiteSpeed) hosting.
+# Rename to ".htaccess" and place it in the website folder
+# (e.g. /public_html/tpsl.in). Requires mod_rewrite and mod_headers.
+#
+# HTTPS: www.tpsl.in is redirected to https below (its certificate is
+# active). tpsl.in redirects to www.tpsl.in once it points to this server.
+# Works behind Cloudflare
+# (use SSL/TLS mode "Full (strict)" there, never "Flexible").
 # =====================================================================
 
 Options -Indexes -MultiViews
 ServerSignature Off
+DirectoryIndex index.html
 
 RewriteEngine On
 
-# Force HTTPS and www
-RewriteCond %{HTTPS} !=on [OR]
-RewriteCond %{HTTP_HOST} !^www\.tpsl\.in$ [NC]
-RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
+# ---- Work out the visitor's scheme (direct, or via Cloudflare) ----
+RewriteRule ^ - [E=PROTO:http]
+RewriteCond %{HTTPS} =on [OR]
+RewriteCond %{HTTP:X-Forwarded-Proto} =https
+RewriteRule ^ - [E=PROTO:https]
+
+# ---- Force HTTPS on www.tpsl.in (its SSL certificate is active) ----
+RewriteCond %{HTTP_HOST} ^www\.tpsl\.in$ [NC]
+RewriteCond %{ENV:PROTO} =http
+RewriteCond %{REQUEST_URI} !^/\.well-known/
 RewriteRule ^ https://www.tpsl.in%{REQUEST_URI} [L,R=301]
 
-# Pretty URLs: /support -> support.html
+# ---- tpsl.in -> www.tpsl.in (only for the real domain, so previews still work) ----
+RewriteCond %{HTTP_HOST} ^tpsl\.in$ [NC]
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteRule ^ %{ENV:PROTO}://www.tpsl.in%{REQUEST_URI} [L,R=301]
+
+# ---- Pretty URLs: /support -> support.html ----
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.+)$ $1.html [L]
 
-# Only enquiry.php may run as PHP
+# ---- Only enquiry.php may run as PHP ----
 RewriteCond %{REQUEST_URI} \.php$ [NC]
-RewriteCond %{REQUEST_URI} !^/enquiry\.php$ [NC]
+RewriteCond %{REQUEST_URI} !(^|/)enquiry\.php$ [NC]
 RewriteRule ^ - [R=404,L]
 
-# Block hidden and stray source files
+# ---- Block hidden and stray source files (keep .well-known for SSL) ----
 RewriteRule (^|/)\.(?!well-known/) - [F,L]
 <FilesMatch "\.(bak|old|orig|swp|sql|log|ini|sh|py|md|conf)$">
   Require all denied
 </FilesMatch>
 
-<LimitExcept GET HEAD POST>
-  Require all denied
-</LimitExcept>
-
 ErrorDocument 404 /404.html
 
 <IfModule mod_headers.c>
-  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+  # HSTS only takes effect over HTTPS; no includeSubDomains, so other tpsl.in subdomains are unaffected
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "DENY"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
-  Header always set Cross-Origin-Opener-Policy "same-origin"
   Header always unset X-Powered-By
 </IfModule>
 

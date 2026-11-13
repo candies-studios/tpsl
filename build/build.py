@@ -187,9 +187,46 @@ def page(filename, title, desc, active, body, noindex=False):
     open(os.path.join(OUT, filename), "w", encoding="utf-8").write(html)
 
 
-def page_hero(crumbs, eyebrow, h1, lead):
+def _jpeg_size(path):
+    """Width/height of a JPEG without third-party libraries."""
+    import struct
+    with open(path, "rb") as f:
+        f.read(2)
+        while True:
+            marker, = struct.unpack(">H", f.read(2))
+            length, = struct.unpack(">H", f.read(2))
+            if marker in (0xFFC0, 0xFFC1, 0xFFC2):
+                f.read(1)
+                h, w = struct.unpack(">HH", f.read(4))
+                return w, h
+            f.read(length - 2)
+
+
+def photo(name, alt, sizes="(max-width: 900px) calc(100vw - 32px), 560px", eager=False, pos=""):
+    """Responsive <img> for assets/img/photos/<name>-sm.jpg (720w) and -lg.jpg."""
+    w, h = _jpeg_size(os.path.join(OUT, "assets/img/photos", f"{name}-lg.jpg"))
+    load = 'fetchpriority="high"' if eager else 'loading="lazy" decoding="async"'
+    style_cls = f' class="photo {pos}"' if pos else ' class="photo"'
+    return (f'<img{style_cls} src="assets/img/photos/{name}-lg.jpg" '
+            f'srcset="assets/img/photos/{name}-sm.jpg 720w, assets/img/photos/{name}-lg.jpg {w}w" '
+            f'sizes="{sizes}" width="{w}" height="{h}" alt="{alt}" {load}>')
+
+
+def page_hero(crumbs, eyebrow, h1, lead, image=None):
     cr = '<li><a href="index.html">Home</a></li>' + "".join(
         (f'<li><a href="{h}">{l}</a></li>' if h else f'<li aria-current="page">{l}</li>') for l, h in crumbs)
+    if image:
+        return f'''<section class="page-hero with-photo">
+  <div class="container">
+    <div>
+      <nav class="breadcrumb" aria-label="Breadcrumb"><ol>{cr}</ol></nav>
+      <span class="eyebrow">{eyebrow}</span>
+      <h1>{h1}</h1>
+      <p class="lead">{lead}</p>
+    </div>
+    <div class="page-hero-photo">{image}</div>
+  </div>
+</section>'''
     return f'''<section class="page-hero">
   <div class="container">
     <nav class="breadcrumb" aria-label="Breadcrumb"><ol>{cr}</ol></nav>
@@ -241,13 +278,16 @@ home = f'''
       <div class="hero-actions"><a class="btn btn-primary" href="offerings.html">Explore Our Solutions</a><a class="btn btn-outline" href="contact.html">Contact Us</a></div>
       <div class="hero-stats"><div><strong>26+</strong><span>Years of experience</span></div><div><strong>30+</strong><span>Partner banks</span></div><div><strong>100+</strong><span>Payment modes</span></div></div>
     </div>
-    <div class="hero-art"><img src="assets/img/hero-payments.svg" alt="" width="560" height="500"></div>
+    <div class="hero-art hero-photo">
+      {photo("home-hero", "Business owner smiling at a payment notification on his phone", sizes="(max-width: 900px) calc(100vw - 32px), 540px", eager=True, pos="pos-60")}
+      <div class="pay-toast" aria-hidden="true"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span><span><strong>Payment received</strong><small>₹1,499 via UPI</small></span></div>
+    </div>
   </div>
 </section>
 
 <section class="section alt" id="about">
   <div class="container split">
-    <div class="reveal"><img src="assets/img/about-network.svg" alt="" width="520" height="420"></div>
+    <div class="reveal about-graphic"><img src="assets/img/about-26-years.png" alt="TPSL: 26+ years serving insurance, NBFC, e-commerce, banking, startup and retail businesses" width="520" height="420" loading="lazy"></div>
     <div class="reveal">
       <span class="eyebrow">About TPSL</span>
       <h2>Your Trusted Payments Technology Partner</h2>
@@ -268,10 +308,10 @@ home = f'''
       <p class="lead">From in-store payments to digital transactions, TPSL offers a comprehensive suite of payment solutions designed to simplify payment acceptance, improve operational efficiency and support business growth.</p>
     </div>
     <div class="cards four">
-      <article class="card reveal"><div class="icon">{ICON["store"]}</div><h3>In-Store Payments</h3><p>Accept payments seamlessly across physical business locations with our range of POS terminals, Soft POS and Sound Box solutions.</p><a class="btn-link" href="in-store-payments.html">Explore In-Store Solutions</a></article>
-      <article class="card reveal"><div class="icon">{ICON["globe"]}</div><h3>Online Payments</h3><p>Enable convenient digital payment acceptance with our Payment Gateway, Recurring Payments and Payment Links solutions.</p><a class="btn-link" href="online-payments.html">Explore Online Solutions</a></article>
-      <article class="card reveal"><div class="icon">{ICON["world"]}</div><h3>Cross-Border Payments</h3><p>Accept payments from international customers using international credit cards, with settlement into designated bank accounts.</p><a class="btn-link" href="cross-border-payments.html">Explore Cross-Border Payments</a></article>
-      <article class="card reveal"><div class="icon">{ICON["spark"]}</div><h3>Value Added Services</h3><p>Go beyond payment acceptance with solutions for merchant management, digital onboarding, Dynamic Currency Conversion, UPI payments, Transit and Embedded payments.</p><a class="btn-link" href="value-added-services.html">Explore Value Added Services</a></article>
+      <article class="card has-photo reveal"><div class="icon">{ICON["store"]}</div><h3>In-Store Payments</h3><p>Accept payments seamlessly across physical business locations with our range of POS terminals, Soft POS and Sound Box solutions.</p><a class="btn-link" href="in-store-payments.html">Explore In-Store Solutions</a><div class="card-photo">{photo("offer-instore", "Customer tapping a phone on a POS terminal", sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1000px) 45vw, 280px")}</div></article>
+      <article class="card has-photo reveal"><div class="icon">{ICON["globe"]}</div><h3>Online Payments</h3><p>Enable convenient digital payment acceptance with our Payment Gateway, Recurring Payments and Payment Links solutions.</p><a class="btn-link" href="online-payments.html">Explore Online Solutions</a><div class="card-photo">{photo("offer-online", "Phone showing a successful card payment", sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1000px) 45vw, 280px")}</div></article>
+      <article class="card has-photo reveal"><div class="icon">{ICON["world"]}</div><h3>Cross-Border Payments</h3><p>Accept payments from international customers using international credit cards, with settlement into designated bank accounts.</p><a class="btn-link" href="cross-border-payments.html">Explore Cross-Border Payments</a><div class="card-photo">{photo("offer-crossborder", "Businesswoman paying on her phone", sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1000px) 45vw, 280px")}</div></article>
+      <article class="card has-photo reveal"><div class="icon">{ICON["spark"]}</div><h3>Value Added Services</h3><p>Go beyond payment acceptance with solutions for merchant management, digital onboarding, Dynamic Currency Conversion, UPI payments, Transit and Embedded payments.</p><a class="btn-link" href="value-added-services.html">Explore Value Added Services</a><div class="card-photo">{photo("offer-vas", "Merchant working on a laptop", sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1000px) 45vw, 280px")}</div></article>
     </div>
   </div>
 </section>
@@ -296,13 +336,13 @@ page("index.html", "TPSL | Powering Payments. Enabling Possibilities.",
 offer = page_hero([("Our Offerings", None)], "Our Offerings", "Payment Solutions for Every Business",
                   "From in-store payments to digital transactions, TPSL offers a comprehensive suite of payment solutions designed to simplify payment acceptance, improve operational efficiency and support business growth.")
 groups = [
-    ("In-Store Payments", "in-store-payments.html", "store", "Smarter Payments for Every Store", "pos-smart.svg",
+    ("In-Store Payments", "in-store-payments.html", "store", "Smarter Payments for Every Store", "offer-instore",
      [("POS Terminals", "pos"), ("Soft POS", "softpos"), ("Sound Box", "soundbox")]),
-    ("Online Payments", "online-payments.html", "globe", "Seamless Digital Payments for Your Business", "checkout-web.svg",
+    ("Online Payments", "online-payments.html", "globe", "Seamless Digital Payments for Your Business", "online-hero",
      [("Payment Gateway", "gateway"), ("Recurring Payments", "recurring"), ("Payment Links", "links")]),
-    ("Cross-Border Payments", "cross-border-payments.html", "world", "Enabling Seamless Payments Across Borders", "cross-border.svg",
+    ("Cross-Border Payments", "cross-border-payments.html", "world", "Enabling Seamless Payments Across Borders", "crossborder-hero",
      [("International Payment Acceptance", "features"), ("Simplified Settlements", "features"), ("Business Benefits", "benefits")]),
-    ("Value Added Services", "value-added-services.html", "spark", "Beyond Payments. Enabling More.", "merchant-hub.svg",
+    ("Value Added Services", "value-added-services.html", "spark", "Beyond Payments. Enabling More.", "merchant-hub",
      [("One Merchant Hub", "hub"), ("Digital &amp; Omnichannel Onboarding", "onboarding"), ("Dynamic Currency Conversion", "dcc"),
       ("End-to-End UPI Solution", "upi"), ("Transit Solutions", "transit"), ("Embedded Payments", "embedded")]),
 ]
@@ -317,7 +357,7 @@ for i, (name, href, ic, tag, art, items) in enumerate(groups):
     offer += f'''<section class="section{' alt' if i % 2 else ''}"><div class="container split{' reverse' if i % 2 else ''}">
   <div class="reveal"><span class="eyebrow">{name}</span><h2>{tag}</h2><p class="lead">{blurbs[name]}</p>
   <ul class="check-list">{links}</ul><a class="btn btn-primary" href="{href}">Explore {name}</a></div>
-  <div class="reveal art-frame"><img src="assets/img/{art}" alt=""></div>
+  <div class="reveal photo-frame">{photo(art, "")}</div>
 </div></section>'''
 offer += cta_band()
 page("offerings.html", "Our Offerings", "TPSL payment solutions: in-store payments, online payments, cross-border payments and value added services for businesses of every size.", "offerings", offer)
@@ -326,16 +366,23 @@ page("offerings.html", "Our Offerings", "TPSL payment solutions: in-store paymen
 def product(id_, eyebrow, h2, tagline, paras, art, extra="", alt="", reverse=False, enquiry=""):
     ps = "".join(f"<p>{p}</p>" for p in paras)
     q = f"?enquiry={enquiry}" if enquiry else ""
-    return f'''<section class="product-block" id="{id_}"><div class="container">
+    if "embed-infographic" in art:
+        frame = "photo-frame with-infographic"
+    elif 'class="photo' in art:
+        frame = "photo-frame" + (" tall" if "photo-tall" in art else "")
+    else:
+        frame = "art-frame"
+    return_html = f'''<section class="product-block" id="{id_}"><div class="container">
   <div class="split{' reverse' if reverse else ''}">
     <div class="reveal"><span class="eyebrow">{eyebrow}</span><h2>{h2}</h2>{f'<p class="sub-head">{tagline}</p>' if tagline else ''}{ps}{extra}<a class="btn btn-primary" href="contact.html{q}">Contact Us</a></div>
-    <div class="reveal art-frame">{art}</div>
+    <div class="reveal {frame}">{art}</div>
   </div>
 </div></section>'''
+    return return_html
 
 
 def carousel(label, devices):
-    cards = "".join(f'<article class="device-card"><div class="device-art"><img src="assets/img/{f}" alt="{a}" loading="lazy" width="300" height="300"></div><h4>{t}</h4><p>{d}</p></article>' for f, a, t, d in devices)
+    cards = "".join(f'<article class="device-card"><div class="device-art"><img src="assets/img/{f}" alt="{a}" loading="lazy" decoding="async" width="560" height="560"></div><h4>{t}</h4><p>{d}</p></article>' for f, a, t, d in devices)
     return f'''<div class="carousel" role="region" aria-label="{label}">
   <div class="carousel-track" tabindex="0">{cards}</div>
   <div class="carousel-controls"><button class="carousel-btn" type="button" data-dir="prev" aria-label="Previous">&#8592;</button><button class="carousel-btn" type="button" data-dir="next" aria-label="Next">&#8594;</button></div>
@@ -343,17 +390,18 @@ def carousel(label, devices):
 
 
 instore = page_hero([("Our Offerings", "offerings.html"), ("In-Store Payments", None)], "In-Store Payment Solutions", "Smarter Payments for Every Store",
-                    "Enable seamless payment acceptance across physical business locations with TPSL's range of in-store payment solutions.")
+                    "Enable seamless payment acceptance across physical business locations with TPSL's range of in-store payment solutions.",
+                    image=photo("offer-instore", "Customer tapping a phone on a POS terminal", sizes="(max-width: 900px) calc(100vw - 32px), 480px", eager=True))
 instore += '<nav class="subnav" aria-label="On this page"><div class="container"><ul><li><a href="#pos">POS Terminals</a></li><li><a href="#softpos">Soft POS</a></li><li><a href="#soundbox">Sound Box</a></li></ul></div></nav>'
 # POS – full-width carousel layout
 instore += f'''<section class="product-block" id="pos"><div class="container">
   <div class="section-head reveal"><span class="eyebrow">POS Terminals</span><h2>Reliable Payments at Every Counter</h2>
   <p class="lead">Accept digital payments conveniently with POS terminals designed for businesses of all sizes. Deliver smooth checkout experiences and simplify everyday transactions.</p></div>
   {carousel("POS terminal range", [
-      ("pos-smart.svg", "Android smart POS terminal", "Android Smart POS", "Touchscreen terminal with built-in printer for cards, UPI and QR."),
-      ("pos-countertop.svg", "Countertop POS terminal", "Countertop POS", "Robust keypad terminal for high-volume billing counters."),
-      ("pos-mini.svg", "Compact handheld POS", "Compact Handheld POS", "Portable terminal with dynamic QR display for on-the-go checkout."),
-      ("pos-mpos.svg", "Card reader paired with smartphone", "mPOS Card Reader", "Lightweight card reader that pairs with a smartphone."),
+      ("devices/pos-android.webp", "Android smart POS terminal with built-in printer", "Android Smart POS", "Touchscreen terminal with built-in printer for cards, UPI and QR."),
+      ("devices/pos-countertop.webp", "Large-screen Android POS terminal", "Countertop POS", "Large-screen Android terminal for busy billing counters."),
+      ("devices/pos-compact.webp", "Compact handheld Android POS", "Compact Handheld POS", "Pocket-sized Android device for checkout on the go."),
+      ("devices/pos-keypad.webp", "Keypad POS terminal with contactless reader", "Keypad POS", "Compact keypad terminal for card, tap and QR payments."),
   ])}
   <p><a class="btn btn-primary" href="contact.html?enquiry=pos">Contact Us</a></p>
 </div></section>'''
@@ -365,10 +413,9 @@ instore += f'''<section class="product-block" id="soundbox"><div class="containe
   <div class="section-head reveal"><span class="eyebrow">Sound Box</span><h2>Instant Payment Alerts. Greater Convenience.</h2>
   <p class="lead">Get instant audio notifications for successful payments, helping merchants confirm transactions and manage busy checkout environments with ease.</p></div>
   {carousel("Sound box range", [
-      ("soundbox-allinone.svg", "All-in-one sound box with QR and card tap", "All-in-One Sound Box", "QR, tap-to-pay and voice alerts in a single counter device."),
-      ("soundbox-display.svg", "Sound box with amount display", "Display Sound Box", "Shows the paid amount on screen alongside the voice alert."),
-      ("soundbox-classic.svg", "Sound box with QR standee", "Classic Sound Box", "Reliable voice confirmation with a static QR standee."),
-      ("soundbox-pocket.svg", "Portable battery sound box", "Portable Sound Box", "Compact, long-battery device for small and mobile merchants."),
+      ("devices/soundbox-allinone.webp", "All-in-one sound box with QR code and tap-to-pay", "All-in-One Sound Box", "QR, tap-to-pay and voice alerts in a single counter device."),
+      ("devices/soundbox-display.webp", "Sound box with QR code and tap-to-pay panel", "Display Sound Box", "Scan or tap to pay, with an instant voice alert for every payment."),
+      ("devices/soundbox-classic.webp", "Sound box QR standee", "Classic Sound Box", "Reliable voice confirmation with a static QR standee."),
   ])}
   <p><a class="btn btn-primary" href="contact.html?enquiry=soundbox">Contact Us</a></p>
 </div></section>'''
@@ -377,7 +424,8 @@ page("in-store-payments.html", "In-Store Payments", "POS terminals, Soft POS and
 
 # =========================================================================== ONLINE
 online = page_hero([("Our Offerings", "offerings.html"), ("Online Payments", None)], "Online Payment Solutions", "Seamless Digital Payments for Your Business",
-                   "Simplify online payment acceptance with flexible solutions designed to support businesses across digital channels.")
+                   "Simplify online payment acceptance with flexible solutions designed to support businesses across digital channels.",
+                   image=photo("online-hero", "Woman paying online with a card at her laptop", sizes="(max-width: 900px) calc(100vw - 32px), 480px", eager=True))
 online += '<nav class="subnav" aria-label="On this page"><div class="container"><ul><li><a href="#gateway">Payment Gateway</a></li><li><a href="#recurring">Recurring Payments</a></li><li><a href="#links">Payment Links</a></li></ul></div></nav>'
 online += f'''<section class="product-block" id="gateway"><div class="container">
   <div class="split">
@@ -385,7 +433,7 @@ online += f'''<section class="product-block" id="gateway"><div class="container"
       <p class="tagline">Seamless Payments. Smarter Transactions. Faster Growth.</p>
       <p>Enable customers to make secure online payments through multiple payment methods with a seamless checkout experience across websites and applications.</p>
       <a class="btn btn-primary" href="contact.html?enquiry=gateway">Contact Us</a></div>
-    <div class="reveal art-frame"><img src="assets/img/checkout-web.svg" alt="Online checkout showing UPI, cards, net banking, EMI and wallets, with a payment success screen on mobile"></div>
+    <div class="reveal photo-frame">{photo("gateway", "Two colleagues completing an online card payment")}</div>
   </div>
   <div class="stat-strip reveal" style-hook="">
     <div><strong>100+ Payment Modes</strong><span>Cards, UPI, Net Banking, EMI &amp; Wallets</span></div>
@@ -402,7 +450,7 @@ def feature_list(items):
 
 online += product("recurring", "Recurring Payments", "Simplify Repeat Payments. Automate Collections.", "",
                   ["Streamline subscription fees, instalments and recurring collections with intelligent payment automation. Enable businesses to manage repeat transactions effortlessly through secure, reliable and seamless payment solutions."],
-                  '<img src="assets/img/recurring.svg" alt="Calendar of scheduled automatic collections">',
+                   photo("recurring", "Colleagues reviewing recurring collections on a tablet"),
                   extra="<h3>Key Features</h3>" + feature_list([
                       ("Multiple Recurring Modes", "Accept recurring payments through Cards, UPI, eNACH, NACH and Direct Debit."),
                       ("End-to-End Automation", "Automate mandate setup, scheduled collections and the entire payment lifecycle."),
@@ -411,7 +459,7 @@ online += product("recurring", "Recurring Payments", "Simplify Repeat Payments. 
                   reverse=True, enquiry="recurring")
 online += product("links", "Payment Links", "Collect Payments. Anytime, Anywhere.", "",
                   ["Generate and share secure payment links with customers to collect payments effortlessly—without requiring a website or mobile application. Simplify the payment process and make it easier for customers to pay from anywhere, on any device."],
-                  '<img src="assets/img/payment-links.svg" alt="Payment link shared to a customer by SMS and email">',
+                   photo("payment-links", "Business owner sharing a payment link while on a call"),
                   extra="<h3>Key Features</h3>" + feature_list([
                       ("Send &amp; Collect Easily", "Create and share payment links instantly through SMS and Email for quick and convenient collections."),
                       ("Customizable Experience", "Personalize payment messages, set link validity and attach invoices for a seamless customer experience."),
@@ -422,8 +470,10 @@ online += cta_band()
 page("online-payments.html", "Online Payments", "TPSL Payment Gateway, Recurring Payments and Payment Links for secure digital payment acceptance.", "offerings", online)
 
 # =========================================================================== CROSS-BORDER
+CARD_SIZES = "(max-width: 640px) calc(100vw - 32px), (max-width: 1000px) 45vw, 280px"
 cb = page_hero([("Our Offerings", "offerings.html"), ("Cross-Border Payments", None)], "Cross-Border Payments", "Enabling Seamless Payments Across Borders",
-               "Expand your business globally with TPSL's Cross-Border Payment Solutions. Accept payments from international customers through a secure and reliable payment infrastructure, simplifying overseas collections and supporting business growth.")
+               "Expand your business globally with TPSL's Cross-Border Payment Solutions. Accept payments from international customers through a secure and reliable payment infrastructure, simplifying overseas collections and supporting business growth.",
+               image=photo("crossborder-hero", "Businesswoman checking an international payment on her phone", sizes="(max-width: 900px) calc(100vw - 32px), 480px", eager=True))
 cb += '''<section class="product-block" id="features"><div class="container">
   <div class="split">
     <div class="reveal"><span class="eyebrow">Key Features</span><h2>International Payments, Simplified</h2>
@@ -441,10 +491,10 @@ cb += '''<section class="product-block" id="features"><div class="container">
 <section class="section alt" id="benefits"><div class="container">
   <div class="section-head reveal"><span class="eyebrow">Business Benefits</span><h2>Grow Beyond Borders</h2></div>
   <div class="cards four">
-    <article class="card reveal"><div class="icon">''' + ICON["world"] + '''</div><h3>Global Reach</h3><p>Expand your reach to international customers.</p></article>
-    <article class="card reveal"><div class="icon">''' + ICON["bank"] + '''</div><h3>Simpler Collections</h3><p>Simplify overseas payment collections.</p></article>
-    <article class="card reveal"><div class="icon">''' + ICON["globe"] + '''</div><h3>Customer Convenience</h3><p>Improve payment convenience for global customers.</p></article>
-    <article class="card reveal"><div class="icon">''' + ICON["chart"] + '''</div><h3>Greater Visibility</h3><p>Manage cross-border transactions with greater visibility.</p></article>
+    <article class="card has-photo reveal"><div class="icon">''' + ICON["world"] + '''</div><h3>Global Reach</h3><p>Expand your reach to international customers.</p><div class="card-photo">''' + photo("benefit-global", "Glowing network of connections across the globe", sizes=CARD_SIZES) + '''</div></article>
+    <article class="card has-photo reveal"><div class="icon">''' + ICON["bank"] + '''</div><h3>Simpler Collections</h3><p>Simplify overseas payment collections.</p><div class="card-photo illus">''' + '<img class="illus" src="assets/img/upi.svg" alt="Phone scanning a QR code to pay" loading="lazy" width="460" height="360">' + '''</div></article>
+    <article class="card has-photo reveal"><div class="icon">''' + ICON["globe"] + '''</div><h3>Customer Convenience</h3><p>Improve payment convenience for global customers.</p><div class="card-photo">''' + photo("benefit-convenience", "Customer paying by card on her laptop", sizes=CARD_SIZES) + '''</div></article>
+    <article class="card has-photo reveal"><div class="icon">''' + ICON["chart"] + '''</div><h3>Greater Visibility</h3><p>Manage cross-border transactions with greater visibility.</p><div class="card-photo illus">''' + '<img class="illus" src="assets/img/merchant-hub.svg" alt="Dashboard showing transactions and reports" loading="lazy" width="520" height="360">' + '''</div></article>
   </div>
 </div></section>'''
 cb += cta_band("Ready to Accept Payments from Around the World?", "Talk to our team about adding international payment acceptance to your business.", "Explore Cross-Border Payment Solutions").replace('href="contact.html"', 'href="contact.html?enquiry=crossborder"')
@@ -457,13 +507,13 @@ vas += '<nav class="subnav" aria-label="On this page"><div class="container"><ul
     f'<li><a href="#{a}">{l}</a></li>' for l, a in next(g for g in groups if g[0] == "Value Added Services")[5]) + "</ul></div></nav>"
 vas += product("hub", "One Merchant Hub", "One Platform. Simplified Merchant Management.", "",
                ["Manage all your payment channels through one unified platform. Gain complete transaction visibility, streamline operations and make smarter business decisions with centralized merchant management."],
-               '<img src="assets/img/merchant-hub.svg" alt="Unified merchant dashboard with transaction metrics and charts">',
+                photo("merchant-hub", "Smiling grocer at his store's checkout counter"),
                extra='''<div class="feature-grid"><div class="feature"><strong>Manage All Payment Channels</strong><ul class="check-list"><li>POS Transactions</li><li>QR Collections</li><li>Online Payments</li><li>Payment Links</li><li>SoftPOS Transactions</li></ul></div>
 <div class="feature"><strong>Powerful Business Insights &amp; Controls</strong><ul class="check-list"><li>Real-Time Visibility</li><li>Unified Reporting</li><li>Analytics &amp; Insights</li><li>Business Management Tools</li><li>Simplified Operations</li></ul></div></div>
 <p class="tagline">One Hub. Every Payment Channel. Complete Control.</p>''', enquiry="hub")
 vas += product("onboarding", "Digital &amp; Omnichannel Onboarding", "Faster Onboarding. Seamless Activation.", "",
                ["Accelerate merchant onboarding with a digital-first solution that simplifies verification, minimizes manual effort and enables faster business activation through seamless self-service and assisted journeys."],
-               '<img src="assets/img/onboarding.svg" alt="Merchant sign-up steps: digital KYC, bank account check, e-Sign and go live">',
+                photo("onboarding", "Boutique owner completing digital onboarding on a tablet"),
                extra="<h3>Key Features</h3>" + feature_list([
                    ("Digital KYC", "Quick and secure identity verification."), ("Account Validation", "Seamless bank account verification."),
                    ("e-Sign", "Hassle-free digital document signing."), ("Assisted &amp; Self-Onboarding", "Flexible onboarding journeys tailored to merchant needs.")]) +
@@ -484,12 +534,12 @@ vas += product("upi", "End-to-End UPI Solution", "Simplifying UPI Payments for B
                '<p class="tagline">One UPI Solution. Seamless Acceptance. Complete Visibility.</p>', reverse=True, enquiry="upi")
 vas += product("transit", "Transit Solutions", "Making Every Journey Seamless.", "",
                ["Enable seamless digital fare collection with an integrated transit solution designed to enhance passenger convenience, simplify operations and streamline transit payments."],
-               '<img src="assets/img/transit.svg" alt="Bus with a contactless fare validator">',
+                photo("transit", "Travellers checking their journey on a tablet", pos="photo-tall"),
                extra='<h3>Key Capabilities</h3><ul class="check-list cols"><li>NCMC-certified Switch &amp; POS Terminals for Retail and Transit</li><li>Live Deployment with DTC</li><li>Pass &amp; Card Issuance</li><li>Integrated Automated Fare Collection System (AFCS)</li><li>Automated Reconciliation</li><li>API-Based Onboarding</li><li>Real-Time Transaction Monitoring</li></ul><p class="tagline">Seamless Payments. Smarter Transit. Connected Journeys.</p>',
                enquiry="transit")
 vas += product("embedded", "Embedded Payments", "Payments Integrated into Your Business.", "",
                ["Embed seamless digital payment capabilities into business platforms and public services, simplifying collections and enhancing citizen convenience across multiple touchpoints."],
-               '<img src="assets/img/embedded.svg" alt="Payment layer connecting e-Challan, parking, donations, property tax, municipal fees and NCMC transit">',
+                photo("embedded", "Professional integrating payments into a platform on his laptop") + '<div class="embed-infographic"><img src="assets/img/embedded.svg" alt="Payment layer connecting e-Challan, parking, donations, property tax, municipal fees and NCMC transit" loading="lazy" width="520" height="360"></div>',
                extra='<h3>Key Use Cases</h3><ul class="pills"><li>Traffic Police e-Challan Collections</li><li>Digital Parking Payments</li><li>Temple Donations</li><li>Property Tax Collections</li><li>Municipal Fines &amp; Fee Collections</li><li>Transit Bus Payments – NCMC</li></ul><h3>Key Features</h3>' + feature_list([
                    ("Multiple Payment Modes", "UPI, Cards, QR and other digital payment options."), ("Seamless Integration", "API-based integration with existing platforms and systems."),
                    ("Real-Time Tracking", "Instant payment confirmation and transaction monitoring."), ("Automated Reconciliation", "Simplified settlement and collection reporting."),
