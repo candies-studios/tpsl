@@ -391,7 +391,7 @@ def carousel(label, devices):
 
 instore = page_hero([("Our Offerings", "offerings.html"), ("In-Store Payments", None)], "In-Store Payment Solutions", "Smarter Payments for Every Store",
                     "Enable seamless payment acceptance across physical business locations with TPSL's range of in-store payment solutions.",
-                    image=photo("offer-instore", "Customer tapping a phone on a POS terminal", sizes="(max-width: 900px) calc(100vw - 32px), 480px", eager=True))
+                    image=photo("instore-hero", "Phone ready to pay at a café counter next to a POS terminal", sizes="(max-width: 900px) calc(100vw - 32px), 480px", eager=True))
 instore += '<nav class="subnav" aria-label="On this page"><div class="container"><ul><li><a href="#pos">POS Terminals</a></li><li><a href="#softpos">Soft POS</a></li><li><a href="#soundbox">Sound Box</a></li></ul></div></nav>'
 # POS – full-width carousel layout
 instore += f'''<section class="product-block" id="pos"><div class="container">
@@ -407,7 +407,7 @@ instore += f'''<section class="product-block" id="pos"><div class="container">
 </div></section>'''
 instore += product("softpos", "Soft POS", "Turn Your Android Smartphone into a Payment Terminal", "",
                    ["Accept contactless payments using a compatible NFC-enabled smartphone without the need for a traditional POS terminal. A convenient payment acceptance solution for businesses on the move."],
-                   '<img src="assets/img/softpos.svg" alt="Contactless card tapped on an Android smartphone">',
+                   photo("softpos", "Contactless card tapped on a smartphone to pay ₹2,000", pos="photo-tall"),
                    extra='<ul class="check-list"><li>Tap to pay with contactless cards and devices</li><li>No additional hardware required</li><li>Ideal for delivery, field sales and pop-up stores</li></ul>', reverse=True, enquiry="softpos")
 instore += f'''<section class="product-block" id="soundbox"><div class="container">
   <div class="section-head reveal"><span class="eyebrow">Sound Box</span><h2>Instant Payment Alerts. Greater Convenience.</h2>
@@ -485,16 +485,16 @@ cb += '''<section class="product-block" id="features"><div class="container">
         <li><strong>Transaction Visibility</strong> – Access payment information and reports for better tracking and reconciliation.</li>
       </ul>
       <a class="btn btn-primary" href="contact.html?enquiry=crossborder">Explore Cross-Border Payment Solutions</a></div>
-    <div class="reveal art-frame"><img src="assets/img/cross-border.svg" alt="International card payment travelling across a globe and settling into a bank account" width="520" height="380"></div>
+    <div class="reveal photo-frame">''' + photo("crossborder-features", "Smiling woman accepting international payments on her laptop in a café") + '''</div>
   </div>
 </div></section>
 <section class="section alt" id="benefits"><div class="container">
   <div class="section-head reveal"><span class="eyebrow">Business Benefits</span><h2>Grow Beyond Borders</h2></div>
   <div class="cards four">
     <article class="card has-photo reveal"><div class="icon">''' + ICON["world"] + '''</div><h3>Global Reach</h3><p>Expand your reach to international customers.</p><div class="card-photo">''' + photo("benefit-global", "Glowing network of connections across the globe", sizes=CARD_SIZES) + '''</div></article>
-    <article class="card has-photo reveal"><div class="icon">''' + ICON["bank"] + '''</div><h3>Simpler Collections</h3><p>Simplify overseas payment collections.</p><div class="card-photo illus">''' + '<img class="illus" src="assets/img/upi.svg" alt="Phone scanning a QR code to pay" loading="lazy" width="460" height="360">' + '''</div></article>
+    <article class="card has-photo reveal"><div class="icon">''' + ICON["bank"] + '''</div><h3>Simpler Collections</h3><p>Simplify overseas payment collections.</p><div class="card-photo">''' + photo("benefit-collections", "Traveller with passport and a phone", sizes=CARD_SIZES) + '''</div></article>
     <article class="card has-photo reveal"><div class="icon">''' + ICON["globe"] + '''</div><h3>Customer Convenience</h3><p>Improve payment convenience for global customers.</p><div class="card-photo">''' + photo("benefit-convenience", "Customer paying by card on her laptop", sizes=CARD_SIZES) + '''</div></article>
-    <article class="card has-photo reveal"><div class="icon">''' + ICON["chart"] + '''</div><h3>Greater Visibility</h3><p>Manage cross-border transactions with greater visibility.</p><div class="card-photo illus">''' + '<img class="illus" src="assets/img/merchant-hub.svg" alt="Dashboard showing transactions and reports" loading="lazy" width="520" height="360">' + '''</div></article>
+    <article class="card has-photo reveal"><div class="icon">''' + ICON["chart"] + '''</div><h3>Greater Visibility</h3><p>Manage cross-border transactions with greater visibility.</p><div class="card-photo">''' + photo("benefit-visibility", "Person reviewing payments on a laptop with a card in hand", sizes=CARD_SIZES) + '''</div></article>
   </div>
 </div></section>'''
 cb += cta_band("Ready to Accept Payments from Around the World?", "Talk to our team about adding international payment acceptance to your business.", "Explore Cross-Border Payment Solutions").replace('href="contact.html"', 'href="contact.html?enquiry=crossborder"')
@@ -520,12 +520,12 @@ vas += product("onboarding", "Digital &amp; Omnichannel Onboarding", "Faster Onb
                '<p class="tagline">Simplify Onboarding. Accelerate Activation.</p>', reverse=True, enquiry="onboarding")
 vas += product("dcc", "Dynamic Currency Conversion (DCC)", "Pay in Your Currency. Enjoy Greater Transparency.", "",
                ["Enable international cardholders to pay in their home currency at the point of sale with real-time currency conversion, greater transparency and a seamless payment experience."],
-               '<img src="assets/img/dcc.svg" alt="POS terminal offering a choice between home currency and Indian rupees">',
+               photo("dcc", "Hotel guest paying by card at the reception desk"),
                extra='<h3>Key Benefits</h3><ul class="check-list"><li>Additional Fee-Based Revenue Opportunity</li><li>Real-Time Currency Conversion</li><li>Transparent Currency Display</li><li>Improved Foreign Card Conversion</li><li>Enhanced Cardholder Experience &amp; Trust</li><li>Growing Adoption Across Premium Merchants</li></ul><p class="tagline">More Transparency. Better Experiences. New Revenue Opportunities.</p>',
                enquiry="dcc")
 vas += product("upi", "End-to-End UPI Solution", "Simplifying UPI Payments for Businesses.", "",
                ["Enable seamless UPI acceptance with a unified solution offering flexible payment modes, real-time transaction visibility and efficient payment management across merchant channels."],
-               '<img src="assets/img/upi.svg" alt="QR standee and smartphone completing a UPI payment">',
+               photo("upi", "Phone showing a completed UPI payment after scanning a QR code"),
                extra="<h3>Key Features</h3>" + feature_list([
                    ("Static &amp; Dynamic QR", "Accept payments through physical and digital QR codes across POS, SoftPOS and SuperApp."),
                    ("Unified Transaction View", "Track POS, QR and online payment transactions through the Worldline SuperApp."),
