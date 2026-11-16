@@ -500,3 +500,100 @@ img.photo.photo-tall { object-position: 50% 30%; }
 
 /* Device photos inside the carousels */
 .device-card .device-art img { width: 100%; height: 100%; object-fit: contain; max-height: none; }
+
+/* =========================================================
+   Feedback round 16-11-26
+   ========================================================= */
+:root { --max: 1320px; }
+p, li, .tagline { text-wrap: pretty; }
+
+/* Home hero: bigger photo, bigger background shapes */
+.hero { padding: 72px 0 88px; }
+.hero-grid { grid-template-columns: .95fr 1.05fr; gap: 56px; }
+.hero-photo img.photo { aspect-ratio: 6 / 5; }
+.hero-shapes { width: 760px; height: 760px; right: -140px; top: 10px; }
+
+/* About: bigger infographic, tags on one line */
+.about-graphic img { max-width: 600px; }
+@media (min-width: 1100px) {
+  #about .pills { flex-wrap: nowrap; gap: 8px; }
+  #about .pills li { padding: 7px 13px; font-size: .86rem; white-space: nowrap; }
+}
+
+/* Compact enquiry form */
+.form-wrap { padding: 26px 28px; }
+.enquiry-form .form-grid { gap: 12px 16px; }
+.field label { font-size: .86rem; margin-bottom: 4px; }
+.field input, .field select, .field textarea { padding: 9px 12px; font-size: .95rem; border-radius: 9px; }
+.field textarea { min-height: 88px; }
+.enquiry-form .consent { font-size: .84rem; }
+.enquiry-form .btn { padding: .8em 1.4em; font-size: .95rem; }
+.enquiry-form p { margin: 12px 0 0; }
+.form-note { margin-top: 8px; font-size: .78rem; }
+.contact-grid { grid-template-columns: 1fr 1fr; gap: 64px; }
+#contact .form-wrap { max-width: 560px; justify-self: end; width: 100%; }
+@media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } #contact .form-wrap { justify-self: stretch; max-width: none; } }
+
+/* Footer: registered office written once, entity details beneath */
+.footer-legal { margin-top: 48px; border: 1px solid #f0d9ca; border-radius: var(--radius-lg); background: rgba(255,255,255,.6); overflow: hidden; }
+.legal-office { display: flex; gap: 16px; align-items: flex-start; padding: 22px 28px; border-bottom: 1px solid #f0d9ca; }
+.legal-office .pin { width: 40px; height: 40px; border-radius: 12px; background: #fff; color: var(--brand); display: grid; place-items: center; flex: 0 0 auto; border: 1px solid #f0d9ca; }
+.legal-office .pin svg { width: 20px; height: 20px; }
+.legal-office .lbl, .legal-entity .lbl { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--brand); margin-bottom: 4px; }
+.legal-office address { font-style: normal; color: var(--ink); font-size: .98rem; line-height: 1.55; }
+.legal-entities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.legal-entity { padding: 22px 28px; }
+.legal-entity + .legal-entity { border-left: 1px solid #f0d9ca; }
+.legal-entity h5 { margin: 0; font-family: var(--font-head); font-size: 1rem; color: var(--ink); }
+.legal-entity .formerly { margin: 2px 0 14px; font-size: .82rem; color: var(--muted); }
+.legal-entity dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.legal-entity dt { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.legal-entity dd { margin: 2px 0 0; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; font-size: .92rem; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .legal-entities { grid-template-columns: 1fr; }
+  .legal-entity + .legal-entity { border-left: 0; border-top: 1px solid #f0d9ca; }
+  .legal-office, .legal-entity { padding: 18px; }
+}
+
+/* Inner-page banners: photo edge to edge on the right, fixed height */
+.page-hero.with-photo { padding: 0; }
+.page-hero.with-photo .container { position: static; display: flex; align-items: center; min-height: 460px; }
+.page-hero.with-photo .container > div:first-child { position: relative; z-index: 2; width: 50%; padding: 56px 48px 56px 0; }
+.page-hero.with-photo h1 { font-size: clamp(2rem, 2.9vw, 2.6rem); }
+.page-hero-photo { position: absolute; top: 0; right: 0; bottom: 0; width: 50%; z-index: 1; }
+.page-hero-photo img.photo { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
+.page-hero.with-photo::after { display: none; }
+@media (max-width: 900px) {
+  .page-hero.with-photo .container { flex-direction: column; align-items: stretch; min-height: 0; padding: 0; }
+  .page-hero.with-photo .container > div:first-child { width: auto; padding: 40px 16px 28px; }
+  .page-hero-photo { position: static; width: 100%; height: 260px; }
+}
+
+/* Product sections: photo matches the height of the text */
+.split.media-fill { align-items: stretch; }
+.split.media-fill .photo-frame { aspect-ratio: auto; min-height: 380px; height: 100%; max-width: none; justify-self: stretch; }
+.split.media-fill .photo-frame img.photo { height: 100%; }
+@media (max-width: 900px) { .split.media-fill .photo-frame { min-height: 0; aspect-ratio: 4 / 3; height: auto; } }
+.product-block h2 { font-size: clamp(1.6rem, 2.5vw, 2.15rem); }
+.section-head.wide { max-width: none; }
+
+/* Gateway: breathing space above the feature strip */
+#gateway .stat-strip { margin-top: 64px; }
+
+/* Transit: tidy capability grid */
+.check-list.cols { gap: 12px 28px; align-items: start; }
+.check-list.cols li.wide { grid-column: 1 / -1; }
+
+/* Embedded: photo and infographic as separate blocks */
+.embed-panel { margin-top: 56px; display: grid; grid-template-columns: .9fr 1.1fr; gap: 40px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 36px; }
+.embed-panel h3 { margin-bottom: 14px; }
+.embed-panel .pills { margin: 0; }
+.embed-panel img { width: 100%; max-width: 560px; margin: 0 auto; }
+@media (max-width: 900px) { .embed-panel { grid-template-columns: 1fr; padding: 24px 18px; } }
+.page-hero.with-photo h1 { font-size: clamp(2rem, 2.55vw, 2.4rem); }
+.hero h1 { font-size: clamp(2.1rem, 3.3vw, 2.9rem); }
+.hero h1 span { display: block; }
+@media (min-width: 901px) and (max-width: 1100px) { .page-hero.with-photo h1 { font-size: 1.8rem; } }
+.split.media-fill .photo-frame { position: relative; min-height: 400px; }
+.split.media-fill .photo-frame img.photo { position: absolute; inset: 0; width: 100%; height: 100%; }
+@media (max-width: 900px) { .split.media-fill .photo-frame { min-height: 0; } }
