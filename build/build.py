@@ -106,7 +106,6 @@ def footer():
     <div class="footer-entities">{"".join(f'''<address class="entity-card"><strong>{e["name"].upper()}</strong><span class="formerly">(Formerly known as "{e["formerly"]}")</span>{ADDRESS_HTML}<span class="ids">CIN: {e["cin"]}<br>GST No. {e["gst"]}</span></address>''' for e in ENTITIES)}</div>
     <div class="footer-bottom">
       <p>© {YEAR} TPSL. All Rights Reserved.</p>
-      <p class="safety">TPSL will never ask for your card PIN, CVV, OTP or passwords. Report suspected fraud on <a href="tel:1930">1930</a> or <a href="https://cybercrime.gov.in/" rel="noopener noreferrer" target="_blank">cybercrime.gov.in</a>.</p>
     </div>
   </div>
 </footer>
