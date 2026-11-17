@@ -64,7 +64,6 @@ def header(active):
     return f'''<a class="skip-link" href="#main">Skip to main content</a>
 <header class="site-header">
   <div class="container header-inner">
-    <a class="logo" href="index.html" aria-label="TPSL home"><img src="assets/img/tpsl-logo.svg" alt="TPSL" width="124" height="60"></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
@@ -81,7 +80,6 @@ def footer():
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="assets/img/tpsl-logo.svg" alt="TPSL" width="124" height="60">
         <p class="tag">Powering Payments. Enabling Possibilities.</p>
         <p class="footer-phone">Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p>
       </div>
@@ -148,7 +146,7 @@ def page(filename, title, desc, active, body, noindex=False):
     if filename == "index.html":
         ld = '<script type="application/ld+json">' + json.dumps({
             "@context": "https://schema.org", "@type": "Organization", "name": "TPSL", "url": SITE + "/",
-            "logo": SITE + "/assets/img/tpsl-logo.svg", "slogan": "Powering Payments. Enabling Possibilities.", "telephone": PHONE_TEL,
+            "slogan": "Powering Payments. Enabling Possibilities.", "telephone": PHONE_TEL,
             "address": {"@type": "PostalAddress", "streetAddress": "Raiaskaran Tech Park, Tower 1, 2nd Floor, Phase 2, Sakinaka, M.V. Road, Andheri East",
                         "addressLocality": "Mumbai", "postalCode": "400072", "addressRegion": "Maharashtra", "addressCountry": "IN"},
         }) + "</script>"
@@ -168,9 +166,6 @@ def page(filename, title, desc, active, body, noindex=False):
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{canonical}">
 <meta name="theme-color" content="#ffffff">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/sora-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/style.css">
@@ -610,28 +605,54 @@ def doc_row(title, meta, href, pending=False):
 
 res = page_hero([("Resources", None)], "Resources", "Resources &amp; Information",
                 "Access important information, documents and updates related to TPSL's payment solutions and services.")
-res += f'''<section class="section"><div class="container">
-  <div class="doc-group reveal"><h2>Policies and Regulatory Information</h2>
-    <ul class="doc-list">
-      {doc_row("Privacy Policy", "Web page · Updated " + UPDATED, "privacy-policy.html")}
-      {doc_row("Terms &amp; Conditions", "Web page", "terms-and-conditions.html")}
-      {doc_row("Disclaimer", "Web page", "disclaimer.html")}
-      {doc_row("Grievance Redressal Mechanism", "Web page · Escalation matrix and nodal officer", "support.html#grievance")}
-      {doc_row("RBI MNRL and Customer Complaint Compliance Rules", "Web page", "support.html#mnrl")}
-      <!-- Add policy PDFs supplied by TPSL here, e.g.:
-      {doc_row("Grievance Redressal Policy", "PDF", "assets/docs/grievance-redressal-policy.pdf")} -->
-    </ul>
-  </div>
-  <div class="doc-group reveal"><h2>Annual Returns and Updates</h2>
-    <!-- Upload each PDF to assets/docs/ and replace the pending rows with doc_row(title, meta, path). -->
-    <ul class="doc-list">
-      {doc_row("Annual Return – TPSL India Private Limited", "PDF · Financial year to be confirmed", "", pending=True)}
-      {doc_row("Annual Return – TPSL ePayments India Private Limited", "PDF · Financial year to be confirmed", "", pending=True)}
-    </ul>
-  </div>
-</div></section>'''
+def pdf_meta(path):
+    """'PDF · N pages · X KB/MB' for a document in assets/docs."""
+    full = os.path.join(OUT, path)
+    size = os.path.getsize(full)
+    size_txt = f"{size / 1048576:.1f} MB" if size >= 1048576 else f"{round(size / 1024)} KB"
+    pages = len(re.findall(rb"/Type\s*/Page[^s]", open(full, "rb").read()))
+    return f"PDF · {pages} page{'s' if pages != 1 else ''} · {size_txt}" if pages else f"PDF · {size_txt}"
+
+
+def pdf_row(title, path):
+    return (f'<li><div class="doc-title">{ICON["doc"]}<div><strong>{title}</strong>'
+            f'<div class="doc-meta">{pdf_meta(path)}</div></div></div>'
+            f'<a class="btn btn-outline" href="{path}" target="_blank" rel="noopener" '
+            f'aria-label="View {title} (PDF, opens in a new tab)">View PDF</a></li>')
+
+
+DOC_GROUPS = [
+    ("gtc", "General Terms and Conditions for Payment Aggregator and Payment Gateway", [
+        ("General Terms &amp; Conditions", "assets/docs/gtc/general-terms-and-conditions.pdf"),
+        ("Merchant Onboarding and Monitoring Policy", "assets/docs/gtc/merchant-onboarding-and-monitoring-policy.pdf"),
+        ("KYC &amp; AML Policy", "assets/docs/gtc/kyc-aml-policy.pdf"),
+        ("Customer Grievance Redressal Policy", "assets/docs/gtc/customer-grievance-redressal-policy.pdf"),
+        ("Refund Policy", "assets/docs/gtc/refund-policy.pdf"),
+        ("Ombudsman Scheme", "assets/docs/gtc/ombudsman-scheme.pdf"),
+        ("Website Privacy Notice", "assets/docs/gtc/website-privacy-notice.pdf"),
+    ]),
+    ("stc", "Special Terms &amp; Conditions", [
+        ("Special Terms and Conditions – POS Transactions", "assets/docs/stc/special-terms-pos-transactions.pdf"),
+        ("Special Terms and Conditions – QR Code Transactions", "assets/docs/stc/special-terms-qr-code-transactions.pdf"),
+        ("Special Terms and Conditions – Tap on Mobile", "assets/docs/stc/special-terms-tap-on-mobile.pdf"),
+        ("Special Terms and Conditions – EMI Transactions", "assets/docs/stc/special-terms-emi-transactions.pdf"),
+        ("Special Terms and Conditions – Dynamic Currency Conversion", "assets/docs/stc/special-terms-dynamic-currency-conversion.pdf"),
+        ("Special Terms and Conditions – Cash", "assets/docs/stc/special-terms-cash.pdf"),
+        ("Special Terms and Conditions – Insurance Services", "assets/docs/stc/special-terms-insurance-services.pdf"),
+        ("Special Terms and Conditions – SignCatch Services", "assets/docs/stc/special-terms-signcatch-services.pdf"),
+    ]),
+    ("financials", "Financial Statements", [
+        ("Financial Statements – FY 2025-26", "assets/docs/financials/financial-statements-fy-2025-26.pdf"),
+        ("Financial Statements – FY 2024-25", "assets/docs/financials/financial-statements-fy-2024-25.pdf"),
+        ("Financial Statements – FY 2023-24", "assets/docs/financials/financial-statements-fy-2023-24.pdf"),
+    ]),
+]
+res += '<section class="section"><div class="container">' + "".join(
+    f'<div class="doc-group reveal" id="{gid}"><h2>{i}. {title}</h2><ul class="doc-list">'
+    + "".join(pdf_row(t, pth) for t, pth in docs) + "</ul></div>"
+    for i, (gid, title, docs) in enumerate(DOC_GROUPS, 1)) + "</div></section>"
 res += cta_band("Can't find what you're looking for?", "Write to us and our team will help you with the information you need.", "Contact Us")
-page("resources.html", "Resources", "TPSL policies, regulatory information, annual returns and updates.", "resources", res)
+page("resources.html", "Resources", "TPSL General Terms and Conditions for Payment Aggregator and Payment Gateway, Special Terms & Conditions and Financial Statements.", "resources", res)
 
 # =========================================================================== CONTACT
 con = page_hero([("Contact Us", None)], "Let's Connect", "Your Business. Our Payment Solutions.",
