@@ -597,3 +597,8 @@ p, li, .tagline { text-wrap: pretty; }
 .split.media-fill .photo-frame { position: relative; min-height: 400px; }
 .split.media-fill .photo-frame img.photo { position: absolute; inset: 0; width: 100%; height: 100%; }
 @media (max-width: 900px) { .split.media-fill .photo-frame { min-height: 0; } }
+
+/* Logo removed: keep the menu on the right */
+.header-inner { justify-content: flex-end; }
+.footer-brand .tag { margin-top: 0; }
+.doc-group h2 { font-size: clamp(1.3rem, 2vw, 1.6rem); }
