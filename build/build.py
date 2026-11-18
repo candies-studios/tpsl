@@ -81,7 +81,6 @@ def footer():
     <div class="footer-grid">
       <div class="footer-brand">
         <p class="tag">Powering Payments. Enabling Possibilities.</p>
-        <p class="footer-phone">Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p>
       </div>
       <div>
         <h4>Quick Links</h4>
@@ -92,17 +91,13 @@ def footer():
         <ul><li><a href="in-store-payments.html">In-Store Payments</a></li><li><a href="online-payments.html">Online Payments</a></li><li><a href="cross-border-payments.html">Cross-Border Payments</a></li><li><a href="value-added-services.html">Value Added Services</a></li></ul>
       </div>
       <div>
-        <h4>Legal &amp; Policies</h4>
-        <ul><li><a href="privacy-policy.html">Privacy Policy</a></li><li><a href="terms-and-conditions.html">Terms &amp; Conditions</a></li><li><a href="disclaimer.html">Disclaimer</a></li><li><a href="support.html#grievance">Grievance Redressal</a></li></ul>
-      </div>
-      <div>
         <h4>Connect With Us</h4>
         <ul><li><a href="contact.html">Contact Us</a></li></ul>
         <div class="social"><a href="{LINKEDIN}" rel="noopener noreferrer" target="_blank" aria-label="TPSL on LinkedIn (opens in a new tab)">{ICON["linkedin"]}</a></div>
       </div>
     </div>
     <div class="footer-legal">
-      <div class="legal-office"><span class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><div><span class="lbl">Registered Office</span><address>{ADDRESS_HTML.replace("<br>", " ")} · Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></address></div></div>
+      <div class="legal-office"><span class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><div><span class="lbl">Registered Office</span><address>{ADDRESS_HTML.replace("<br>", " ")}</address></div></div>
       <div class="legal-entities">{"".join(f'''<div class="legal-entity"><h5>{e["name"]}</h5><p class="formerly">Formerly {e["formerly"]}</p><dl><div><dt>CIN</dt><dd>{e["cin"]}</dd></div><div><dt>GSTIN</dt><dd>{e["gst"]}</dd></div></dl></div>''' for e in ENTITIES)}</div>
     </div>
     <div class="footer-bottom">
@@ -127,8 +122,6 @@ def footer():
 <script src="assets/js/main.js" defer></script>'''
 
 
-PHONE_DISPLAY = "022 7198 0000"
-PHONE_TEL = "+912271980000"
 ADDRESS_HTML = "Raiaskaran Tech Park, Tower 1, 2nd Floor, Phase 2,<br>Sakinaka, M.V. Road, Andheri East,<br>Mumbai – 400072"
 ENTITIES = [
     {"name": "TPSL India Private Limited", "formerly": "Worldline India Private Limited",
@@ -146,7 +139,7 @@ def page(filename, title, desc, active, body, noindex=False):
     if filename == "index.html":
         ld = '<script type="application/ld+json">' + json.dumps({
             "@context": "https://schema.org", "@type": "Organization", "name": "TPSL", "url": SITE + "/",
-            "slogan": "Powering Payments. Enabling Possibilities.", "telephone": PHONE_TEL,
+            "slogan": "Powering Payments. Enabling Possibilities.",
             "address": {"@type": "PostalAddress", "streetAddress": "Raiaskaran Tech Park, Tower 1, 2nd Floor, Phase 2, Sakinaka, M.V. Road, Andheri East",
                         "addressLocality": "Mumbai", "postalCode": "400072", "addressRegion": "Maharashtra", "addressCountry": "IN"},
         }) + "</script>"
@@ -181,6 +174,8 @@ def page(filename, title, desc, active, body, noindex=False):
 </html>
 '''
     html = "\n".join(l for l in html.split("\n") if l.strip() != "")
+    # keep a space at forced heading line-breaks, so words don't join when the break is hidden on phones
+    html = re.sub(r"(<h[12][^>]*>)(.*?)(</h[12]>)", lambda m: m.group(1) + re.sub(r"\s*<br>\s*", " <br>", m.group(2)) + m.group(3), html, flags=re.S)
     open(os.path.join(OUT, filename), "w", encoding="utf-8").write(html)
 
 
@@ -383,7 +378,7 @@ def product(id_, eyebrow, h2, tagline, paras, art, extra="", alt="", reverse=Fal
 
 
 def carousel(label, devices):
-    cards = "".join(f'<article class="device-card"><div class="device-art"><img src="assets/img/{f}" alt="{a}" loading="lazy" decoding="async" width="560" height="560"></div><h4>{t}</h4><p>{d}</p></article>' for f, a, t, d in devices)
+    cards = "".join(f'<article class="device-card"><div class="device-art"><img src="assets/img/{f}" alt="{a}" decoding="async" width="560" height="560"></div></article>' for f, a, t, d in devices)
     return f'''<div class="carousel" role="region" aria-label="{label}">
   <div class="carousel-track" tabindex="0">{cards}</div>
   <div class="carousel-controls"><button class="carousel-btn" type="button" data-dir="prev" aria-label="Previous">&#8592;</button><button class="carousel-btn" type="button" data-dir="next" aria-label="Next">&#8594;</button></div>
@@ -402,7 +397,6 @@ instore += f'''<section class="product-block" id="pos"><div class="container">
       ("devices/pos-android.webp", "Android smart POS terminal with built-in printer", "Android Smart POS", "Touchscreen terminal with built-in printer for cards, UPI and QR."),
       ("devices/pos-countertop.webp", "Large-screen Android POS terminal", "Countertop POS", "Large-screen Android terminal for busy billing counters."),
       ("devices/pos-compact.webp", "Compact handheld Android POS", "Compact Handheld POS", "Pocket-sized Android device for checkout on the go."),
-      ("devices/pos-keypad.webp", "Keypad POS terminal with contactless reader", "Keypad POS", "Compact keypad terminal for card, tap and QR payments."),
   ])}
   <p><a class="btn btn-primary" href="contact.html?enquiry=pos">Contact Us</a></p>
 </div></section>'''
@@ -648,9 +642,9 @@ DOC_GROUPS = [
     ]),
 ]
 res += '<section class="section"><div class="container">' + "".join(
-    f'<div class="doc-group reveal" id="{gid}"><h2>{i}. {title}</h2><ul class="doc-list">'
-    + "".join(pdf_row(t, pth) for t, pth in docs) + "</ul></div>"
-    for i, (gid, title, docs) in enumerate(DOC_GROUPS, 1)) + "</div></section>"
+    ['<div class="doc-group reveal" id="policies"><h2>Policies</h2><ul class="doc-list">'
+     + "".join(pdf_row(t, pth) for _gid, _title, docs in DOC_GROUPS for t, pth in docs)
+     + "</ul></div>"]) + "</div></section>"
 res += cta_band("Can't find what you're looking for?", "Write to us and our team will help you with the information you need.", "Contact Us")
 page("resources.html", "Resources", "TPSL General Terms and Conditions for Payment Aggregator and Payment Gateway, Special Terms & Conditions and Financial Statements.", "resources", res)
 
@@ -659,9 +653,8 @@ con = page_hero([("Contact Us", None)], "Let's Connect", "Your Business. Our Pay
                 "Whether you're looking for payment solutions, exploring a partnership or seeking assistance, we're here to help. Connect with TPSL to discover how our payment technology can support your business.")
 con += f'''<section class="section"><div class="container contact-grid">
   <div>
-    <div class="info-card"><h3>TPSL India Private Limited</h3><p>{ADDRESS_HTML}</p><p>CIN: {ENTITIES[0]["cin"]}<br>GST No. {ENTITIES[0]["gst"]}</p><p>Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p><p>Customer support: <a href="tel:18602332332">1860 233 2332</a></p><p><a href="mailto:customer_support@mail.tpsl-india.co.in">customer_support@mail.tpsl-india.co.in</a></p></div>
-    <div class="info-card"><h3>TPSL ePayments India Private Limited</h3><p>{ADDRESS_HTML}</p><p>CIN: {ENTITIES[1]["cin"]}<br>GST No. {ENTITIES[1]["gst"]}</p><p>Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p><p>Customer service: <a href="tel:+912267664481">022-67664481</a></p><p><a href="mailto:grievance@mail.tpsl-india.co.in">grievance@mail.tpsl-india.co.in</a></p></div>
-    <div class="info-card"><h3>Corporate enquiries</h3><p>Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p></div>
+    <div class="info-card"><h3>TPSL India Private Limited</h3><p>{ADDRESS_HTML}</p><p>CIN: {ENTITIES[0]["cin"]}<br>GST No. {ENTITIES[0]["gst"]}</p><p>Customer support: <a href="tel:18602332332">1860 233 2332</a></p><p><a href="mailto:customer_support@mail.tpsl-india.co.in">customer_support@mail.tpsl-india.co.in</a></p></div>
+    <div class="info-card"><h3>TPSL ePayments India Private Limited</h3><p>{ADDRESS_HTML}</p><p>CIN: {ENTITIES[1]["cin"]}<br>GST No. {ENTITIES[1]["gst"]}</p><p>Customer service: <a href="tel:+912267664481">022-67664481</a></p><p><a href="mailto:grievance@mail.tpsl-india.co.in">grievance@mail.tpsl-india.co.in</a></p></div>
     <p class="muted">For complaints, please follow the <a href="support.html#grievance">grievance redressal process</a>.</p>
   </div>
   <div>{enquiry_form("contact-form")}</div>
@@ -676,7 +669,7 @@ def legal(filename, title, desc, intro, sections, review_note=True):
     html = page_hero([(title, None)], "Legal &amp; Policies", title, intro) + f'''{note}
 <section class="section"><div class="container legal">
   <p class="updated">Last updated: {UPDATED}</p>
-  <nav class="toc" aria-label="Contents"><strong>Contents</strong><ol>{toc}</ol></nav>
+  <nav class="toc" aria-label="Contents"><strong>Contents</strong><ul class="toc-list">{toc}</ul></nav>
   {body}
 </div></section>'''
     page(filename, title, desc, "", html)
@@ -685,7 +678,7 @@ def legal(filename, title, desc, intro, sections, review_note=True):
 GRO = f'''<p><strong>Grievance Officer / Data Protection contact</strong><br>
 Name: {ph("Name")}<br>Designation: {ph("Designation")}<br>
 Email: {ph("privacy@tpsl.in or designated mailbox")}<br>
-Address: {ADDRESS_HTML.replace("<br>", " ")}<br>Tel: <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></p>'''
+Address: {ADDRESS_HTML.replace("<br>", " ")}</p>'''
 
 privacy_sections = [
     ("scope", "Scope of this Policy", f'''<p>This Privacy Policy explains how TPSL India Private Limited and TPSL ePayments India Private Limited (together, "TPSL", "we", "us" or "our") collect, use, share and protect information when you visit <a href="{SITE}/">{SITE.replace("https://", "")}</a> (the "Website") or contact us through it.</p>
