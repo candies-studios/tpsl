@@ -219,12 +219,12 @@ def page_hero(crumbs, eyebrow, h1, lead, image=None):
     <div class="page-hero-photo">{image}</div>
   </div>
 </section>'''
-    return f'''<section class="page-hero">
+    return f'''<section class="page-hero{' no-lead' if not lead else ''}">
   <div class="container">
     <nav class="breadcrumb" aria-label="Breadcrumb"><ol>{cr}</ol></nav>
     <span class="eyebrow">{eyebrow}</span>
     <h1>{h1}</h1>
-    <p class="lead">{lead}</p>
+    {f'<p class="lead">{lead}</p>' if lead else ''}
   </div>
 </section>'''
 
@@ -597,8 +597,7 @@ def doc_row(title, meta, href, pending=False):
     return f'<li><div class="doc-title">{ICON["doc"]}<div><strong>{title}</strong><div class="doc-meta">{meta}</div></div></div>{btn}</li>'
 
 
-res = page_hero([("Resources", None)], "Resources", "Resources &amp; Information",
-                "Access important information, documents and updates related to TPSL's payment solutions and services.")
+res = page_hero([("Resources", None)], "Resources", "Resources &amp; Information", "")
 def pdf_meta(path):
     """'PDF · N pages · X KB/MB' for a document in assets/docs."""
     full = os.path.join(OUT, path)

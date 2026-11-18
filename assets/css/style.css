@@ -696,3 +696,8 @@ img, video, svg { max-width: 100%; }
   .carousel-track { grid-auto-columns: calc(45% - 10px); }
   .hero-photo { max-width: 560px; }
 }
+/* Page banner without a description: compact, heading sits neatly */
+.page-hero.no-lead { padding: 56px 0 48px; }
+.page-hero.no-lead h1 { margin-bottom: 0; }
+.page-hero.no-lead::after { top: -140px; }
+@media (max-width: 900px) { .page-hero.no-lead { padding: 32px 0 28px; } }
