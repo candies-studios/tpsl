@@ -636,14 +636,17 @@ DOC_GROUPS = [
         ("Special Terms and Conditions – SignCatch Services", "assets/docs/stc/special-terms-signcatch-services.pdf"),
     ]),
     ("financials", "Financial Statements", [
-        ("Financial Statements – FY 2025-26", "assets/docs/financials/financial-statements-fy-2025-26.pdf"),
-        ("Financial Statements – FY 2024-25", "assets/docs/financials/financial-statements-fy-2024-25.pdf"),
-        ("Financial Statements – FY 2023-24", "assets/docs/financials/financial-statements-fy-2023-24.pdf"),
+        ("FY 2025-26", "assets/docs/financials/financial-statements-fy-2025-26.pdf"),
+        ("FY 2024-25", "assets/docs/financials/financial-statements-fy-2024-25.pdf"),
+        ("FY 2023-24", "assets/docs/financials/financial-statements-fy-2023-24.pdf"),
     ]),
 ]
 res += '<section class="section"><div class="container">' + "".join(
     ['<div class="doc-group reveal" id="policies"><h2>Policies</h2><ul class="doc-list">'
-     + "".join(pdf_row(t, pth) for _gid, _title, docs in DOC_GROUPS for t, pth in docs)
+     + "".join(pdf_row(t, pth) for gid, _title, docs in DOC_GROUPS if gid != "financials" for t, pth in docs)
+     + "</ul></div>",
+     '<div class="doc-group reveal" id="financials"><h2>Financial Statements</h2><ul class="doc-list">'
+     + "".join(pdf_row(t, pth) for gid, _title, docs in DOC_GROUPS if gid == "financials" for t, pth in docs)
      + "</ul></div>"]) + "</div></section>"
 res += cta_band("Can't find what you're looking for?", "Write to us and our team will help you with the information you need.", "Contact Us")
 page("resources.html", "Resources", "TPSL General Terms and Conditions for Payment Aggregator and Payment Gateway, Special Terms & Conditions and Financial Statements.", "resources", res)
