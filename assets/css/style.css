@@ -602,3 +602,97 @@ p, li, .tagline { text-wrap: pretty; }
 .header-inner { justify-content: flex-end; }
 .footer-brand .tag { margin-top: 0; }
 .doc-group h2 { font-size: clamp(1.3rem, 2vw, 1.6rem); }
+
+/* =========================================================
+   Mobile compatibility pass (18-11-26)
+   ========================================================= */
+html, body { max-width: 100%; overflow-x: hidden; }
+img, video, svg { max-width: 100%; }
+.legal-office .lbl, .legal-entity .lbl, .legal-entity dt { font-size: .75rem; }
+
+/* Device galleries: image only, no arrows needed when everything fits */
+.device-card { padding: 16px; }
+.device-card .device-art { margin-bottom: 0; }
+@media (min-width: 901px) {
+  .carousel-track { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-columns: auto; overflow: visible; }
+  .carousel-controls { display: none; }
+}
+
+@media (max-width: 900px) {
+  /* Home hero: one column (later desktop rules had kept it two-column) */
+  .hero { padding: 40px 0 56px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hero h1 { font-size: clamp(2rem, 8.5vw, 2.6rem); }
+  .hero h1 span { display: inline; }
+  .hero .lead { font-size: 1.05rem; }
+  .hero-actions .btn { flex: 1 1 auto; }
+  .hero-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 32px; }
+  .hero-stats div strong { font-size: 1.6rem; }
+  .hero-stats div span { font-size: .82rem; line-height: 1.3; display: block; }
+  .hero-shapes { width: 340px; height: 340px; right: -170px; top: 120px; bottom: auto; opacity: .45; }
+  .hero-photo img.photo { aspect-ratio: 4 / 3; border-radius: 20px; }
+  .pay-toast { left: 12px; top: 12px; max-width: calc(100% - 24px); }
+
+  /* Sections breathe less on small screens */
+  .section, .product-block { padding: 56px 0; }
+  .section-head { margin-bottom: 28px; }
+  .split, .split.media-fill { gap: 28px; }
+  .about-graphic img { max-width: 420px; }
+  #about .pills { flex-wrap: wrap; }
+  .page-hero { padding: 40px 0 36px; }
+  .page-hero .lead { font-size: 1rem; }
+
+  /* Device carousel: swipe one card at a time, aligned with the page gutter */
+  .carousel-track { grid-auto-columns: 78%; margin: 0 -16px; padding: 4px 16px 16px; scroll-padding-inline: 16px; scrollbar-width: none; }
+  .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-controls { justify-content: flex-start; }
+
+  /* Footer: comfortable tap targets, no squeezed ID numbers */
+  .site-footer { padding-top: 48px; }
+  .site-footer li { margin-bottom: 2px; }
+  .site-footer li a { display: inline-block; padding: 8px 0; }
+  .footer-grid { gap: 28px; }
+
+  /* Lists of links: bigger tap targets */
+  .toc li a, .check-list a, .subnav a { display: inline-block; padding-top: 6px; padding-bottom: 6px; }
+  .card .btn-link { padding: 8px 0; }
+
+  /* Floating accessibility button: smaller, out of the way of content */
+  .a11y-btn { width: 46px; height: 46px; right: 12px; bottom: 12px; border-width: 3px; }
+  .a11y-btn svg { width: 22px; height: 22px; }
+  .a11y-panel { right: 12px; bottom: 66px; }
+
+  /* Forms: 16px text so phones don't zoom in when typing */
+  .field input, .field select, .field textarea { font-size: 16px; padding: 11px 12px; }
+  .form-wrap { padding: 22px 18px; }
+
+  /* CTA band */
+  .cta-band { padding: 32px 22px; border-radius: 22px; }
+  .cta-band .btn { width: 100%; }
+}
+
+@media (max-width: 520px) {
+  .legal-entity dl { grid-template-columns: 1fr; gap: 8px; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions .btn { width: 100%; }
+  .stat-strip div { padding: 20px; }
+  .doc-list li { padding: 16px; }
+  .doc-list a.btn { align-self: stretch; text-align: center; }
+  .levels .level, .entity { padding: 20px; }
+  .step { padding: 20px 18px 20px 72px; }
+  .step::before { left: 18px; }
+}
+@media (max-width: 900px) {
+  .carousel-controls { display: none; }
+  .carousel + p { margin-top: 8px; }
+}
+@media (max-width: 600px) {
+  main h1 br, main h2 br { display: none; }
+}
+.toc .toc-list { list-style: none; margin: 8px 0 0; padding: 0; }
+.toc .toc-list li { margin-bottom: 4px; }
+.btn { line-height: 1.25; text-align: center; }
+@media (min-width: 600px) and (max-width: 900px) {
+  .carousel-track { grid-auto-columns: calc(45% - 10px); }
+  .hero-photo { max-width: 560px; }
+}
