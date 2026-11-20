@@ -64,6 +64,7 @@ def header(active):
     return f'''<a class="skip-link" href="#main">Skip to main content</a>
 <header class="site-header">
   <div class="container header-inner">
+    <a class="logo" href="index.html" aria-label="TPSL home"><img src="assets/img/tpsl-wordmark.svg" alt="TPSL" width="113" height="34"></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
@@ -80,6 +81,7 @@ def footer():
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
+        <img src="assets/img/tpsl-wordmark.svg" alt="TPSL" width="113" height="34">
         <p class="tag">Powering Payments. Enabling Possibilities.</p>
       </div>
       <div>
@@ -138,7 +140,7 @@ def page(filename, title, desc, active, body, noindex=False):
     ld = ""
     if filename == "index.html":
         ld = '<script type="application/ld+json">' + json.dumps({
-            "@context": "https://schema.org", "@type": "Organization", "name": "TPSL", "url": SITE + "/",
+            "@context": "https://schema.org", "@type": "Organization", "name": "TPSL", "url": SITE + "/", "logo": SITE + "/assets/img/tpsl-wordmark.svg",
             "slogan": "Powering Payments. Enabling Possibilities.",
             "address": {"@type": "PostalAddress", "streetAddress": "Raiaskaran Tech Park, Tower 1, 2nd Floor, Phase 2, Sakinaka, M.V. Road, Andheri East",
                         "addressLocality": "Mumbai", "postalCode": "400072", "addressRegion": "Maharashtra", "addressCountry": "IN"},
@@ -530,12 +532,12 @@ vas += product("upi", "End-to-End UPI Solution", "Simplifying UPI Payments for B
                '<p class="tagline">One UPI Solution. Seamless Acceptance. Complete Visibility.</p>', reverse=True, enquiry="upi")
 vas += product("transit", "Transit Solutions", "Making Every Journey Seamless.", "",
                ["Enable seamless digital fare collection with an integrated transit solution designed to enhance passenger convenience, simplify operations and streamline transit payments."],
-                photo("transit", "Travellers checking their journey on a tablet", pos="photo-tall"),
+                photo("transit", "Bus conductor collecting a fare with a handheld ticketing terminal", pos="photo-transit"),
                extra='<h3>Key Capabilities</h3><ul class="check-list cols"><li class="wide">NCMC-certified Switch &amp; POS Terminals for Retail and Transit</li><li class="wide">Integrated Automated Fare Collection System (AFCS)</li><li>Live Deployment with DTC</li><li>Pass &amp; Card Issuance</li><li>Automated Reconciliation</li><li>API-Based Onboarding</li><li class="wide">Real-Time Transaction Monitoring</li></ul><p class="tagline">Seamless Payments. Smarter Transit. Connected&nbsp;Journeys.</p>',
                enquiry="transit")
 vas += product("embedded", "Embedded Payments", "Payments Integrated into Your Business.", "",
                ["Embed seamless digital payment capabilities into business platforms and public services, simplifying collections and enhancing citizen convenience across multiple touchpoints."],
-                photo("embedded", "Professional integrating payments into a platform on his laptop"),
+                photo("embedded", "Field agent showing a farmer a payment on his phone", pos="photo-embedded"),
                extra='<h3>Key Features</h3>' + feature_list([
                    ("Multiple Payment Modes", "UPI, Cards, QR and other digital payment options."), ("Seamless Integration", "API-based integration with existing platforms and systems."),
                    ("Real-Time Tracking", "Instant payment confirmation and transaction monitoring."), ("Automated Reconciliation", "Simplified settlement and collection reporting."),
@@ -687,7 +689,7 @@ privacy_sections = [
 <p>This policy covers the Website only. Payment transactions processed through TPSL's products are governed by the terms and privacy notices that apply to those services and by the merchant or bank through which you transact.</p>
 <p>By using the Website you acknowledge this policy. Where we rely on your consent (for example, when you submit an enquiry), we ask for it clearly and you may withdraw it at any time.</p>'''),
     ("collect", "1. Information We Collect", '''<h3>Information you provide directly</h3>
-<p>When you submit an enquiry through the contact form we collect your full name, company name, business email address, contact number, the nature of your enquiry and your message. When you write to our support or grievance mailboxes we receive the details you choose to include.</p>
+<p>When you submit an enquiry through the contact form we collect your full name, company name, business email address, contact number, the nature of your enquiry and your message. Each enquiry is saved in a secured database on our website hosting server and sent by email to our team, so that we can respond and keep a record of it. When you write to our support or grievance mailboxes we receive the details you choose to include.</p>
 <p>Please do not send card numbers, PIN, CVV, OTP, passwords or bank account credentials through the Website or by email. TPSL will never ask you for them.</p>
 <h3>Analytics information</h3>
 <p>The Website does not currently use third-party analytics or advertising tools. If we introduce analytics in future, it will be used only to measure traffic and usage trends in aggregated form so that individual users cannot be identified, and this policy will be updated before it is enabled.</p>
